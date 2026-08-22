@@ -9,14 +9,22 @@
             --bg: #0b1120; --panel: #1e293b; --primary: #38bdf8; --warning: #f59e0b;
             --success: #10b981; --danger: #ef4444; --text: #f8fafc; --muted: #94a3b8;
             --cost: #34d399; --deflect: #fbbf24;
+            --input-bg: #1e293b; --input-border: #475569;
+        }
+        .light-theme {
+            --bg: #f8fafc; --panel: #ffffff; --primary: #0284c7; --warning: #d97706;
+            --success: #059669; --danger: #dc2626; --text: #0f172a; --muted: #64748b;
+            --cost: #10b981; --deflect: #f59e0b;
+            --input-bg: #f1f5f9; --input-border: #cbd5e1;
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
         .container { max-width: 1150px; width: 100%; background: var(--panel); padding: 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
         
         .header-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 15px; margin-bottom: 20px; }
         .header-bar h1 { margin: 0; font-size: 24px; color: var(--primary); display: flex; align-items: center; gap: 10px; }
-        .lang-btn { background: #334155; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .lang-btn:hover { background: #475569; }
+        .header-actions { display: flex; gap: 10px; }
+        .lang-btn, .theme-btn { background: #334155; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .lang-btn:hover, .theme-btn:hover { background: #475569; }
 
         .tabs { display: flex; gap: 10px; margin-bottom: 25px; background: #0f172a; padding: 5px; border-radius: 8px; }
         .tab-btn { flex: 1; background: transparent; color: var(--muted); border: none; padding: 12px; font-size: 15px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; }
@@ -32,14 +40,21 @@
         .step-num { background: var(--primary); color: #000; width: 22px; height: 22px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 13px; font-weight: bold; }
 
         label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; font-weight: 500; }
-        input, select { width: 100%; padding: 12px; background: #1e293b; border: 1px solid #475569; color: white; border-radius: 6px; box-sizing: border-box; margin-bottom: 15px; font-family: monospace; font-size: 14px; transition: 0.2s;}
+        input, select { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--input-border); color: var(--text); border-radius: 6px; box-sizing: border-box; margin-bottom: 15px; font-family: monospace; font-size: 14px; transition: 0.2s;}
         input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
         select optgroup { background: #0f172a; color: var(--primary); font-style: normal; font-weight: bold; }
-        select option { background: #1e293b; color: white; font-weight: normal; }
+        select option { background: var(--input-bg); color: var(--text); font-weight: normal; }
+        .error { border-color: var(--danger) !important; }
+        .error-msg { color: var(--danger); font-size: 12px; margin-top: -10px; margin-bottom: 10px; display: none; }
         
+        .info-icon { display: inline-block; background: var(--primary); color: #000; border-radius: 50%; width: 16px; height: 16px; text-align: center; font-size: 11px; cursor: pointer; margin-left: 5px; vertical-align: middle; }
+        .tooltip { position: relative; display: inline-block; }
+        .tooltip .tooltiptext { visibility: hidden; width: 250px; background: #334155; color: #fff; text-align: center; border-radius: 6px; padding: 8px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -125px; opacity: 0; transition: opacity 0.3s; font-size: 12px; }
+        .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
+
         .flex-row { display: flex; gap: 15px; align-items: center; }
         .flex-col { flex: 1; }
-        .diagram-box { width: 120px; height: 120px; background: #1e293b; border: 1px solid #475569; border-radius: 8px; display: flex; justify-content: center; align-items: center; padding: 10px; position: relative;}
+        .diagram-box { width: 120px; height: 120px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 8px; display: flex; justify-content: center; align-items: center; padding: 10px; position: relative;}
         .diagram-box svg { max-width: 100%; max-height: 100%; }
         
         .beam-inputs, .geo-inputs { display: none; }
@@ -48,12 +63,14 @@
         button.calc-btn { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 10px; box-shadow: 0 4px 15px rgba(56,189,248,0.3); }
         button.calc-btn:hover { background: #0ea5e9; transform: translateY(-2px); }
         button.print-btn { background: var(--success); margin-top: 25px; box-shadow: 0 4px 15px rgba(16,185,129,0.2); }
+        button.template-btn { background: var(--warning); color: #000; margin-top: 10px; }
         
         .custom-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; align-items: end; margin-bottom: 25px;}
         button.add-btn { padding: 12px 15px; background: var(--text); color: var(--bg); border: none; border-radius: 6px; font-weight: bold; cursor: pointer; height: 44px; width: 100%;}
         .custom-list { max-height: 300px; overflow-y: auto; background: #0f172a; border-radius: 8px; padding: 10px; border: 1px solid #334155; }
-        .custom-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #334155; font-size: 13px; background: #1e293b; margin-bottom: 5px; border-radius: 6px; }
+        .custom-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #334155; font-size: 13px; background: var(--input-bg); margin-bottom: 5px; border-radius: 6px; }
         .del-btn { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;}
+        .edit-btn { background: var(--primary); color: #000; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; margin-right: 5px;}
 
         .results { display: none; margin-top: 35px; border-top: 2px dashed #334155; padding-top: 30px; }
         .geo-summary { background: #0f172a; padding: 15px; border-radius: 8px; border: 1px dashed var(--primary); margin-bottom: 25px; font-family: monospace; font-size: 14px; text-align: center; color: var(--text); }
@@ -64,9 +81,9 @@
         .card h4 { margin: 0 0 18px 0; font-size: 17px; color: #fff; border-bottom: 1px solid #334155; padding-bottom: 12px; display: flex; justify-content: space-between; align-items: center;}
         .cost-badge { font-size: 13px; color: var(--bg); background: var(--cost); padding: 4px 8px; border-radius: 5px; font-weight: bold;}
         .data-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px; }
-        .data-row span:last-child { font-family: monospace; font-size: 14px; color: #f8fafc; }
+        .data-row span:last-child { font-family: monospace; font-size: 14px; color: var(--text); }
         
-        .stress-box { background: #1e293b; padding: 10px; border-radius: 6px; margin: 15px 0; border-left: 3px solid var(--primary); }
+        .stress-box { background: var(--input-bg); padding: 10px; border-radius: 6px; margin: 15px 0; border-left: 3px solid var(--primary); }
         .stress-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 5px;}
         
         .highlight-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; color: var(--warning); margin-top: 15px; padding-top: 15px; border-top: 1px dashed #334155;}
@@ -79,11 +96,21 @@
         .bar-row { display: flex; align-items: center; margin-bottom: 25px; }
         .bar-label { width: 160px; font-size: 12px; font-weight: bold; color: var(--text); padding-right:10px; line-height:1.2;}
         .bar-track-wrapper { flex: 1; position: relative; padding-top: 20px; }
-        .bar-track { background: #1e293b; height: 28px; border-radius: 6px; position: relative; width: 100%; border: 1px solid #334155; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+        .bar-track { background: var(--input-bg); height: 28px; border-radius: 6px; position: relative; width: 100%; border: 1px solid #334155; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
         .bar-fill { height: 100%; border-radius: 6px; position: absolute; left: 0; top: 0; display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; box-sizing: border-box; font-size: 12px; font-weight: bold; color: #000; transition: width 0.5s ease-out;}
         .yield-marker { position: absolute; top: -12px; bottom: -8px; width: 2px; background: var(--warning); z-index: 10; border-left: 2px dashed #000; }
         .yield-text { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--warning); font-weight: bold; white-space: nowrap; background: #0f172a; padding: 2px 6px; border-radius: 4px;}
         
+        .radar-container { margin-top: 30px; text-align: center; }
+        .radar-container canvas { max-width: 100%; }
+
+        .deform-container { margin-top: 30px; }
+        .deform-container svg { width: 100%; height: auto; }
+        
+        .unit-selector { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 15px; }
+        .unit-btn { background: #334155; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .unit-btn.active { background: var(--primary); color: #000; }
+
         .print-header { display: none; }
         .print-summary-table { display: none; }
 
@@ -91,7 +118,7 @@
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             body { background: #ffffff !important; color: #000000 !important; padding: 0; font-family: Arial, sans-serif; }
             .container { box-shadow: none !important; max-width: 100% !important; border-radius: 0 !important; padding: 0 !important; border: none !important; background: #fff !important; }
-            .header-bar, .tabs, #tab-materials, .grid-3, .calc-btn, .print-btn { display: none !important; }
+            .header-bar, .tabs, #tab-materials, .grid-3, .calc-btn, .print-btn, .template-btn, .unit-selector { display: none !important; }
             .results { display: block !important; margin-top: 0 !important; border: none !important; padding-top: 0 !important; }
             
             .print-header { display: flex !important; justify-content: space-between; border-bottom: 3px solid #000; margin-bottom: 20px; padding-bottom: 10px; align-items: flex-end;}
@@ -132,10 +159,13 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="mainContainer">
     <div class="header-bar">
         <h1 id="appTitle">🚀 Global Engineering Material Analyzer Pro</h1>
-        <button class="lang-btn" onclick="toggleLang()" id="langBtn">TR / EN</button>
+        <div class="header-actions">
+            <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️ Açık Tema</button>
+            <button class="lang-btn" onclick="toggleLang()" id="langBtn">TR / EN</button>
+        </div>
     </div>
 
     <div class="tabs">
@@ -145,10 +175,10 @@
 
     <div id="tab-analysis" class="tab-content active">
         <div class="grid-3">
-            
+            <!-- Yükleme Senaryosu -->
             <div class="input-group">
                 <h3 id="grpLoad"><span class="step-num">1</span> Statik Yükleme Senaryosu</h3>
-                <label id="lblBeamType">Kuvvetin Uygulanma Şekli</label>
+                <label id="lblBeamType">Kuvvetin Uygulanma Şekli <span class="tooltip">ⓘ<span class="tooltiptext" id="tipBeamType"></span></span></label>
                 <select id="beamType" onchange="changeBeam()">
                     <option value="axial" id="optAxial">Saf Eksenel Çekme / Basma</option>
                     <option value="cant_pt" id="optCantPt">Konsol Kiriş - Uçtan Tekil Yük</option>
@@ -159,10 +189,12 @@
 
                 <div class="flex-row">
                     <div class="flex-col">
-                        <label id="lblForce">Toplam Kuvvet - F (N)</label>
+                        <label id="lblForce">Toplam Kuvvet - F (N) <span class="tooltip">ⓘ<span class="tooltiptext" id="tipForce"></span></span></label>
                         <input type="number" id="force" value="4500">
-                        <label id="lblLength">Kiriş/Parça Uz. - L (mm)</label>
+                        <div class="error-msg" id="errForce"></div>
+                        <label id="lblLength">Kiriş/Parça Uz. - L (mm) <span class="tooltip">ⓘ<span class="tooltiptext" id="tipLength"></span></span></label>
                         <input type="number" id="length" value="250">
+                        <div class="error-msg" id="errLength"></div>
                         <label id="lblTemp">Sıcaklık Değ. / ΔT (°C)</label>
                         <input type="number" id="delta_t" value="0">
                     </div>
@@ -213,11 +245,13 @@
                         </svg>
                     </div>
                 </div>
+                <button class="calc-btn template-btn" onclick="loadTemplate()" id="templateBtn">📋 Örnek Senaryo Yükle</button>
             </div>
             
+            <!-- Kesit Geometrisi -->
             <div class="input-group">
                 <h3 id="grpGeo"><span class="step-num">2</span> Kesit Geometrisi</h3>
-                <label id="lblProfile">Kesit Profili (Şekli)</label>
+                <label id="lblProfile">Kesit Profili (Şekli) <span class="tooltip">ⓘ<span class="tooltiptext" id="tipProfile"></span></span></label>
                 <select id="profileType" onchange="changeProfile()">
                     <option value="rect" id="optRect">Dikdörtgen Kiriş</option>
                     <option value="solid" id="optSolid">Dolu Mil (Silindir)</option>
@@ -228,50 +262,55 @@
                     <div class="flex-col">
                         <div id="geo_rect" class="geo-inputs active">
                             <label id="lblWidth">Genişlik - b (mm)</label>
-                            <input type="number" id="rect_b" value="20">
+                            <input type="number" id="rect_b" value="20" oninput="updateDynamicSVG()">
                             <label id="lblHeight">Yükseklik - h (mm)</label>
-                            <input type="number" id="rect_h" value="30">
+                            <input type="number" id="rect_h" value="30" oninput="updateDynamicSVG()">
                         </div>
                         <div id="geo_solid" class="geo-inputs">
                             <label id="lblDiam">Çap - d (mm)</label>
-                            <input type="number" id="solid_d" value="25">
+                            <input type="number" id="solid_d" value="25" oninput="updateDynamicSVG()">
                         </div>
                         <div id="geo_hollow" class="geo-inputs">
                             <label id="lblOutDiam">Dış Çap - D (mm)</label>
-                            <input type="number" id="hollow_d" value="30">
+                            <input type="number" id="hollow_d" value="30" oninput="updateDynamicSVG()">
                             <label id="lblThick">Et Kalınlığı - t (mm)</label>
-                            <input type="number" id="hollow_t" value="3">
+                            <input type="number" id="hollow_t" value="3" oninput="updateDynamicSVG()">
                         </div>
                     </div>
                     
                     <div class="diagram-box">
                         <svg id="svg_rect" class="geo-inputs active" viewBox="0 0 100 100" width="100%" height="100%">
-                            <rect x="25" y="15" width="50" height="70" fill="none" stroke="#38bdf8" stroke-width="3" />
-                            <path d="M 15 15 L 15 85" stroke="#94a3b8" stroke-width="1" /><text x="2" y="55" fill="#94a3b8" font-size="12">h</text>
-                            <path d="M 25 93 L 75 93" stroke="#94a3b8" stroke-width="1" /><text x="45" y="99" fill="#94a3b8" font-size="12">b</text>
+                            <rect id="rect_shape" x="25" y="15" width="50" height="70" fill="none" stroke="#38bdf8" stroke-width="3" />
+                            <text id="rect_label_b" x="45" y="99" fill="#94a3b8" font-size="12">b</text>
+                            <text id="rect_label_h" x="2" y="55" fill="#94a3b8" font-size="12">h</text>
                         </svg>
                         <svg id="svg_solid" class="geo-inputs" viewBox="0 0 100 100" width="100%" height="100%">
-                            <circle cx="50" cy="50" r="35" fill="#38bdf8" opacity="0.3" stroke="#38bdf8" stroke-width="3" />
-                            <path d="M 15 50 L 85 50" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4" /><text x="45" y="45" fill="#f8fafc" font-size="14">d</text>
+                            <circle id="solid_circle" cx="50" cy="50" r="35" fill="#38bdf8" opacity="0.3" stroke="#38bdf8" stroke-width="3" />
+                            <text x="45" y="45" fill="#f8fafc" font-size="14">d</text>
                         </svg>
                         <svg id="svg_hollow" class="geo-inputs" viewBox="0 0 100 100" width="100%" height="100%">
-                            <circle cx="50" cy="50" r="40" fill="none" stroke="#38bdf8" stroke-width="2" />
-                            <circle cx="50" cy="50" r="25" fill="none" stroke="#38bdf8" stroke-width="2" />
-                            <path d="M 10 50 L 90 50" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2" /><text x="45" y="45" fill="#f8fafc" font-size="14">D</text>
+                            <circle id="hollow_outer" cx="50" cy="50" r="40" fill="none" stroke="#38bdf8" stroke-width="2" />
+                            <circle id="hollow_inner" cx="50" cy="50" r="25" fill="none" stroke="#38bdf8" stroke-width="2" />
+                            <text x="45" y="45" fill="#f8fafc" font-size="14">D</text>
                             <path d="M 75 50 L 90 50" stroke="#ef4444" stroke-width="3" /><text x="78" y="43" fill="#ef4444" font-size="14" font-weight="bold">t</text>
                         </svg>
                     </div>
                 </div>
             </div>
 
+            <!-- Malzeme Seçimi -->
             <div class="input-group">
                 <h3 id="grpMat"><span class="step-num">3</span> Malzeme Seçimi</h3>
-                <label id="lblMat1">Kıyaslanacak Malzeme 1</label>
-                <select id="mat1"></select>
-                <label id="lblMat2">Kıyaslanacak Malzeme 2</label>
-                <select id="mat2"></select>
-                <label id="lblMat3">Kıyaslanacak Malzeme 3</label>
-                <select id="mat3"></select>
+                <div class="search-box">
+                    <input type="text" id="matSearch" placeholder="🔍 Malzeme ara..." oninput="filterMaterials()" style="margin-bottom:10px; padding:8px;">
+                </div>
+                <label id="lblMat1">Kıyaslanacak Malzeme 1 <span class="info-icon" onclick="showMaterialInfo('mat1')">ⓘ</span></label>
+                <select id="mat1" onchange="updateMatInfoIcon(this)"></select>
+                <label id="lblMat2">Kıyaslanacak Malzeme 2 <span class="info-icon" onclick="showMaterialInfo('mat2')">ⓘ</span></label>
+                <select id="mat2" onchange="updateMatInfoIcon(this)"></select>
+                <label id="lblMat3">Kıyaslanacak Malzeme 3 <span class="info-icon" onclick="showMaterialInfo('mat3')">ⓘ</span></label>
+                <select id="mat3" onchange="updateMatInfoIcon(this)"></select>
+                <div id="materialInfoBox" style="display:none; background:#0f172a; padding:10px; border-radius:6px; margin-top:10px; font-size:12px; color:var(--muted);"></div>
             </div>
         </div>
 
@@ -298,13 +337,14 @@
         
         <div class="input-group">
             <h3 id="grpList">📂 Kayıtlı Özel Malzemelerim</h3>
+            <button class="add-btn" onclick="toggleExpertMode()" style="margin-bottom:15px;" id="btnExpert">🔧 Uzman Modu (Varsayılanları Düzenle)</button>
             <div class="custom-list" id="customListContainer"></div>
+            <div id="expertListContainer" style="display:none;"></div>
         </div>
     </div>
 
     <!-- SONUÇLAR VE PDF GÖRÜNÜMÜ -->
     <div class="results" id="resultsArea">
-        
         <div class="print-header">
             <div>
                 <h1 id="printTitle">Engineering Analysis Report</h1>
@@ -316,6 +356,11 @@
             </div>
         </div>
         
+        <div class="unit-selector">
+            <button class="unit-btn active" id="unitSI" onclick="setUnitSystem('SI')">SI (mm, MPa)</button>
+            <button class="unit-btn" id="unitImperial" onclick="setUnitSystem('Imperial')">Imperial (in, psi)</button>
+        </div>
+
         <table class="print-summary-table" id="printSummaryTable"></table>
 
         <div class="geo-summary" id="geoSummaryDiv"></div>
@@ -326,75 +371,57 @@
             <div class="chart-title" id="chartTitle">Stress vs. Yield Strength Graph</div>
             <div id="chartBars"></div>
         </div>
+
+        <div class="radar-container">
+            <h3 id="radarTitle">📡 Malzeme Karşılaştırma Radar Grafiği</h3>
+            <canvas id="radarCanvas" width="400" height="400"></canvas>
+        </div>
+
+        <div class="deform-container">
+            <h3 id="deformTitle">🏗️ Deformasyon Animasyonu</h3>
+            <svg id="deformSVG" viewBox="0 0 600 200" width="100%" height="200"></svg>
+        </div>
         
         <button class="calc-btn print-btn" onclick="window.print()" id="printBtn">📄 Kurumsal PDF Raporu Çıkart</button>
     </div>
 </div>
 
 <script>
-    // Global sonuç hesaplama bayrağı
-    let resultsCalculated = false;
-
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-        document.getElementById('tab-' + tabId).classList.add('active');
-        document.getElementById('btn-' + tabId).classList.add('active');
-        
-        // Sonuçların görünürlüğünü yönet
-        if (tabId === 'materials') {
-            document.getElementById('resultsArea').style.display = 'none';
-        } else if (tabId === 'analysis' && resultsCalculated) {
-            document.getElementById('resultsArea').style.display = 'block';
-        }
-    }
-
-    // MEGA ENDÜSTRİYEL VERİTABANI (40+ Malzeme, Kategorize Edilmiş)
-    let defaultMaterials = {
-        // Havacılık & İleri Alaşımlar
-        "ti6al4v": { name: "Titanium Ti-6Al-4V", category: "aero", density: 4.43, yield: 880, alpha: 8.6, eMod: 114.0, cost: 45.0 },
-        "inconel718": { name: "Inconel 718 (Superalloy)", category: "aero", density: 8.19, yield: 1035, alpha: 13.0, eMod: 200.0, cost: 65.0 },
-        "alu7075": { name: "Aluminum 7075-T6 (Aero)", category: "aero", density: 2.81, yield: 503, alpha: 23.6, eMod: 71.7, cost: 6.5 },
-        "alu2024": { name: "Aluminum 2024-T3", category: "aero", density: 2.78, yield: 345, alpha: 23.2, eMod: 73.1, cost: 8.0 },
-        "magnesium": { name: "Magnesium AZ31B", category: "aero", density: 1.77, yield: 200, alpha: 26.0, eMod: 45.0, cost: 10.0 },
-        
-        // Çelik ve Döküm (Steels & Irons)
-        "steelA36": { name: "Structural Steel A36", category: "steel", density: 7.85, yield: 250, alpha: 12.0, eMod: 200.0, cost: 1.5 },
-        "steel304": { name: "Stainless Steel 304", category: "steel", density: 8.00, yield: 215, alpha: 17.3, eMod: 193.0, cost: 3.5 },
-        "steel316": { name: "Stainless Steel 316", category: "steel", density: 8.00, yield: 205, alpha: 16.0, eMod: 193.0, cost: 4.5 },
-        "steel4140": { name: "Chromoly Steel 4140", category: "steel", density: 7.85, yield: 415, alpha: 12.2, eMod: 200.0, cost: 2.5 },
-        "toolsteel": { name: "Tool Steel O1 (Annealed)", category: "steel", density: 7.85, yield: 400, alpha: 12.0, eMod: 200.0, cost: 5.0 },
-        "castiron": { name: "Cast Iron (Gray)", category: "steel", density: 7.15, yield: 150, alpha: 11.0, eMod: 100.0, cost: 1.2 },
-        
-        // Demir Dışı Metaller (Non-Ferrous)
-        "alu6061": { name: "Aluminum 6061-T6", category: "nonfer", density: 2.70, yield: 276, alpha: 23.6, eMod: 69.0, cost: 4.5 },
-        "copper": { name: "Pure Copper (C11000)", category: "nonfer", density: 8.96, yield: 70, alpha: 16.6, eMod: 117.0, cost: 10.0 },
-        "beryllium_cu": { name: "Beryllium Copper (C17200)", category: "nonfer", density: 8.25, yield: 690, alpha: 17.0, eMod: 130.0, cost: 35.0 },
-        "brass": { name: "Brass (Yellow C26000)", category: "nonfer", density: 8.47, yield: 125, alpha: 20.0, eMod: 105.0, cost: 8.0 },
-        "bronze": { name: "Phosphor Bronze (C51000)", category: "nonfer", density: 8.80, yield: 380, alpha: 17.0, eMod: 110.0, cost: 12.0 },
-        
-        // Mühendislik Polimerleri & Plastikler
-        "peek": { name: "PEEK Polymer", category: "poly", density: 1.32, yield: 100, alpha: 47.0, eMod: 3.6, cost: 120.0 },
-        "nylon66": { name: "Nylon 6/6 (PA66)", category: "poly", density: 1.14, yield: 80, alpha: 80.0, eMod: 2.8, cost: 12.0 },
-        "delrin": { name: "Delrin (Acetal/POM)", category: "poly", density: 1.42, yield: 60, alpha: 90.0, eMod: 2.9, cost: 15.0 },
-        "teflon": { name: "PTFE (Teflon)", category: "poly", density: 2.20, yield: 23, alpha: 112.0, eMod: 0.5, cost: 30.0 },
-        "pvc": { name: "PVC (Polyvinyl Chloride)", category: "poly", density: 1.40, yield: 45, alpha: 70.0, eMod: 3.0, cost: 3.0 },
-        
-        // 3D Baskı / Prototip (3D Printing)
-        "pa612_cf15": { name: "PA612-CF15 Composite (3D)", category: "3d", density: 1.15, yield: 110, alpha: 25.0, eMod: 8.5, cost: 80.0 },
-        "ultem9085": { name: "Ultem 9085 (PEI - 3D)", category: "3d", density: 1.27, yield: 110, alpha: 50.0, eMod: 3.3, cost: 150.0 },
-        "pc": { name: "Polycarbonate (PC - 3D)", category: "3d", density: 1.20, yield: 65, alpha: 65.0, eMod: 2.3, cost: 25.0 },
-        "pla": { name: "PLA Polymer (3D)", category: "3d", density: 1.24, yield: 60, alpha: 68.0, eMod: 3.5, cost: 15.0 },
-        "abs": { name: "ABS Polymer (3D)", category: "3d", density: 1.04, yield: 40, alpha: 90.0, eMod: 2.2, cost: 20.0 },
-        "petg": { name: "PETG Polymer (3D)", category: "3d", density: 1.27, yield: 50, alpha: 70.0, eMod: 2.0, cost: 18.0 },
-        "tpu": { name: "TPU 95A (Flexible 3D)", category: "3d", density: 1.22, yield: 10, alpha: 130.0, eMod: 0.05, cost: 25.0 },
-        
-        // Kompozit, Ahşap ve Yapısal (Composites & Civil)
-        "cf_epoxy": { name: "Carbon Fiber Epoxy (Iso)", category: "comp", density: 1.60, yield: 600, alpha: 2.0, eMod: 70.0, cost: 100.0 },
-        "g10": { name: "G10 Garolite (Fiberglass)", category: "comp", density: 1.80, yield: 250, alpha: 9.0, eMod: 18.0, cost: 20.0 },
-        "oak": { name: "Oak Wood (Parallel to Grain)", category: "comp", density: 0.75, yield: 40, alpha: 5.0, eMod: 11.0, cost: 2.0 },
-        "mdf": { name: "MDF (Medium Density Fiberboard)", category: "comp", density: 0.75, yield: 15, alpha: 10.0, eMod: 3.0, cost: 1.0 },
-        "concrete": { name: "Concrete C30 (Compressive)", category: "comp", density: 2.40, yield: 30, alpha: 10.0, eMod: 30.0, cost: 0.1 }
+    // ========== GENİŞLETİLMİŞ VERİTABANI ==========
+    const defaultMaterials = {
+        "ti6al4v": { name: "Titanium Ti-6Al-4V", category: "aero", density: 4.43, yield: 880, alpha: 8.6, eMod: 114.0, cost: 45.0, fatigue: 500, descTr: "Havacılık ve biyomedikal implantlarda kullanılan yüksek mukavemetli, hafif alaşım.", descEn: "High strength, lightweight alloy used in aerospace and biomedical implants." },
+        "inconel718": { name: "Inconel 718 (Superalloy)", category: "aero", density: 8.19, yield: 1035, alpha: 13.0, eMod: 200.0, cost: 65.0, fatigue: 600, descTr: "Yüksek sıcaklık dayanımı; jet motorları ve gaz türbinlerinde.", descEn: "High temperature resistance; jet engines and gas turbines." },
+        "alu7075": { name: "Aluminum 7075-T6 (Aero)", category: "aero", density: 2.81, yield: 503, alpha: 23.6, eMod: 71.7, cost: 6.5, fatigue: 250, descTr: "Havacılık sınıfı alüminyum; yüksek mukavemet/ağırlık oranı.", descEn: "Aerospace grade aluminum; high strength-to-weight ratio." },
+        "alu2024": { name: "Aluminum 2024-T3", category: "aero", density: 2.78, yield: 345, alpha: 23.2, eMod: 73.1, cost: 8.0, fatigue: 200, descTr: "Yorulma direnci yüksek havacılık alaşımı.", descEn: "High fatigue resistance aerospace alloy." },
+        "magnesium": { name: "Magnesium AZ31B", category: "aero", density: 1.77, yield: 200, alpha: 26.0, eMod: 45.0, cost: 10.0, fatigue: 120, descTr: "En hafif yapısal metal; otomotiv ve elektronik kasalarda.", descEn: "Lightest structural metal; automotive and electronics housings." },
+        "steelA36": { name: "Structural Steel A36", category: "steel", density: 7.85, yield: 250, alpha: 12.0, eMod: 200.0, cost: 1.5, fatigue: 180, descTr: "Genel yapı çeliği; binalar, köprüler, makine parçaları.", descEn: "General structural steel; buildings, bridges, machine parts." },
+        "steel304": { name: "Stainless Steel 304", category: "steel", density: 8.00, yield: 215, alpha: 17.3, eMod: 193.0, cost: 3.5, fatigue: 200, descTr: "Korozyona dayanıklı paslanmaz çelik; mutfak ve kimyasal ekipman.", descEn: "Corrosion resistant stainless steel; kitchen and chemical equipment." },
+        "steel316": { name: "Stainless Steel 316", category: "steel", density: 8.00, yield: 205, alpha: 16.0, eMod: 193.0, cost: 4.5, fatigue: 190, descTr: "Deniz suyuna dayanıklı; medikal ve denizcilik uygulamaları.", descEn: "Resistant to seawater; medical and marine applications." },
+        "steel4140": { name: "Chromoly Steel 4140", category: "steel", density: 7.85, yield: 415, alpha: 12.2, eMod: 200.0, cost: 2.5, fatigue: 350, descTr: "Isıl işlemle sertleştirilebilir; şaftlar, dişliler.", descEn: "Heat treatable; shafts, gears." },
+        "toolsteel": { name: "Tool Steel O1 (Annealed)", category: "steel", density: 7.85, yield: 400, alpha: 12.0, eMod: 200.0, cost: 5.0, fatigue: 300, descTr: "Kesici takımlar ve kalıplar için; yüksek aşınma direnci.", descEn: "For cutting tools and dies; high wear resistance." },
+        "castiron": { name: "Cast Iron (Gray)", category: "steel", density: 7.15, yield: 150, alpha: 11.0, eMod: 100.0, cost: 1.2, fatigue: 80, descTr: "Titreşim sönümleme; motor blokları, makine gövdeleri.", descEn: "Vibration damping; engine blocks, machine frames." },
+        "alu6061": { name: "Aluminum 6061-T6", category: "nonfer", density: 2.70, yield: 276, alpha: 23.6, eMod: 69.0, cost: 4.5, fatigue: 150, descTr: "Çok yönlü alüminyum; kaynaklanabilir, makine parçaları.", descEn: "Versatile aluminum; weldable, machine parts." },
+        "copper": { name: "Pure Copper (C11000)", category: "nonfer", density: 8.96, yield: 70, alpha: 16.6, eMod: 117.0, cost: 10.0, fatigue: 60, descTr: "Mükemmel elektrik iletkeni; kablo ve bara.", descEn: "Excellent electrical conductor; cables and busbars." },
+        "beryllium_cu": { name: "Beryllium Copper (C17200)", category: "nonfer", density: 8.25, yield: 690, alpha: 17.0, eMod: 130.0, cost: 35.0, fatigue: 400, descTr: "Yüksek mukavemet ve iletkenlik; yaylar, konnektörler.", descEn: "High strength and conductivity; springs, connectors." },
+        "brass": { name: "Brass (Yellow C26000)", category: "nonfer", density: 8.47, yield: 125, alpha: 20.0, eMod: 105.0, cost: 8.0, fatigue: 90, descTr: "Dekoratif ve sıhhi tesisat; kolay işlenir.", descEn: "Decorative and plumbing; easy to machine." },
+        "bronze": { name: "Phosphor Bronze (C51000)", category: "nonfer", density: 8.80, yield: 380, alpha: 17.0, eMod: 110.0, cost: 12.0, fatigue: 250, descTr: "Yorulma direnci yüksek; yataklar, burçlar.", descEn: "High fatigue resistance; bearings, bushings." },
+        "peek": { name: "PEEK Polymer", category: "poly", density: 1.32, yield: 100, alpha: 47.0, eMod: 3.6, cost: 120.0, fatigue: 80, descTr: "Yüksek sıcaklık ve kimyasal direnç; havacılık, medikal.", descEn: "High temperature and chemical resistance; aerospace, medical." },
+        "nylon66": { name: "Nylon 6/6 (PA66)", category: "poly", density: 1.14, yield: 80, alpha: 80.0, eMod: 2.8, cost: 12.0, fatigue: 50, descTr: "Aşınma direnci; dişliler, rulmanlar.", descEn: "Wear resistance; gears, bearings." },
+        "delrin": { name: "Delrin (Acetal/POM)", category: "poly", density: 1.42, yield: 60, alpha: 90.0, eMod: 2.9, cost: 15.0, fatigue: 40, descTr: "Düşük sürtünme; hassas mekanik parçalar.", descEn: "Low friction; precision mechanical parts." },
+        "teflon": { name: "PTFE (Teflon)", category: "poly", density: 2.20, yield: 23, alpha: 112.0, eMod: 0.5, cost: 30.0, fatigue: 15, descTr: "Çok düşük sürtünme; conta ve yalıtım.", descEn: "Very low friction; seals and insulation." },
+        "pvc": { name: "PVC (Polyvinyl Chloride)", category: "poly", density: 1.40, yield: 45, alpha: 70.0, eMod: 3.0, cost: 3.0, fatigue: 30, descTr: "Ucuz, kimyasal dirençli; boru ve profil.", descEn: "Inexpensive, chemical resistant; pipes and profiles." },
+        "pa612_cf15": { name: "PA612-CF15 Composite (3D)", category: "3d", density: 1.15, yield: 110, alpha: 25.0, eMod: 8.5, cost: 80.0, fatigue: 70, descTr: "Karbon fiber katkılı 3D baskı; yüksek rijitlik.", descEn: "Carbon fiber filled 3D printing; high stiffness." },
+        "ultem9085": { name: "Ultem 9085 (PEI - 3D)", category: "3d", density: 1.27, yield: 110, alpha: 50.0, eMod: 3.3, cost: 150.0, fatigue: 60, descTr: "Alev geciktirici; havacılık iç parçaları.", descEn: "Flame retardant; aerospace interior parts." },
+        "pc": { name: "Polycarbonate (PC - 3D)", category: "3d", density: 1.20, yield: 65, alpha: 65.0, eMod: 2.3, cost: 25.0, fatigue: 40, descTr: "Darbe dayanımı; şeffaf parçalar.", descEn: "Impact resistant; transparent parts." },
+        "pla": { name: "PLA Polymer (3D)", category: "3d", density: 1.24, yield: 60, alpha: 68.0, eMod: 3.5, cost: 15.0, fatigue: 35, descTr: "Biyobozunur, kolay baskı; prototip.", descEn: "Biodegradable, easy to print; prototyping." },
+        "abs": { name: "ABS Polymer (3D)", category: "3d", density: 1.04, yield: 40, alpha: 90.0, eMod: 2.2, cost: 20.0, fatigue: 25, descTr: "Dayanıklı; otomotiv parçaları, oyuncak.", descEn: "Durable; automotive parts, toys." },
+        "petg": { name: "PETG Polymer (3D)", category: "3d", density: 1.27, yield: 50, alpha: 70.0, eMod: 2.0, cost: 18.0, fatigue: 30, descTr: "Kolay baskı, kimyasal direnç; şişe ve kap.", descEn: "Easy to print, chemical resistant; bottles and containers." },
+        "tpu": { name: "TPU 95A (Flexible 3D)", category: "3d", density: 1.22, yield: 10, alpha: 130.0, eMod: 0.05, cost: 25.0, fatigue: 8, descTr: "Esnek, elastomerik; conta, tampon.", descEn: "Flexible, elastomeric; gaskets, bumpers." },
+        "cf_epoxy": { name: "Carbon Fiber Epoxy (Iso)", category: "comp", density: 1.60, yield: 600, alpha: 2.0, eMod: 70.0, cost: 100.0, fatigue: 400, descTr: "Çok yüksek mukavemet/ağırlık; spor ekipmanları.", descEn: "Very high strength-to-weight; sports equipment." },
+        "g10": { name: "G10 Garolite (Fiberglass)", category: "comp", density: 1.80, yield: 250, alpha: 9.0, eMod: 18.0, cost: 20.0, fatigue: 150, descTr: "Elektrik yalıtımı; devre kartı, yapısal.", descEn: "Electrical insulation; circuit boards, structural." },
+        "oak": { name: "Oak Wood (Parallel to Grain)", category: "comp", density: 0.75, yield: 40, alpha: 5.0, eMod: 11.0, cost: 2.0, fatigue: 25, descTr: "Mobilya ve yapı; doğal, estetik.", descEn: "Furniture and construction; natural, aesthetic." },
+        "mdf": { name: "MDF (Medium Density Fiberboard)", category: "comp", density: 0.75, yield: 15, alpha: 10.0, eMod: 3.0, cost: 1.0, fatigue: 10, descTr: "Mobilya içi; pürüzsüz yüzey.", descEn: "Furniture interiors; smooth surface." },
+        "concrete": { name: "Concrete C30 (Compressive)", category: "comp", density: 2.40, yield: 30, alpha: 10.0, eMod: 30.0, cost: 0.1, fatigue: 20, descTr: "Yapısal beton; basma dayanımı.", descEn: "Structural concrete; compressive strength." }
     };
 
     const categoryNames = {
@@ -407,77 +434,98 @@
         "custom": { en: "⭐ My Custom Materials", tr: "⭐ Özel Malzemelerim" }
     };
 
-    let materials = { ...defaultMaterials };
-
     const dict = {
-        "en": {
+        en: {
             title: "🚀 Global Engineering Material Analyzer Pro",
             tabAna: "📊 Analysis & Simulation", tabMat: "⚙️ Material Library",
             grpLoad: "Static System & Load", grpGeo: "Cross-Section Profile", grpMat: "Select Materials",
-            lblBeamType: "Load & System Scenario", 
-            optAxial: "Pure Axial Tension / Compression", optCantPt: "Cantilever - Point Load", optCantUdl: "Cantilever - Uniform Load", optSuppPt: "Supported - Point Load", optSuppUdl: "Supported - Uniform Load",
+            lblBeamType: "Load & System Scenario", optAxial: "Pure Axial Tension / Compression", optCantPt: "Cantilever - Point Load", optCantUdl: "Cantilever - Uniform Load", optSuppPt: "Supported - Point Load", optSuppUdl: "Supported - Uniform Load",
             lblForce: "Total Force - F (N)", lblLength: "Beam/Arm Length - L (mm)", lblTemp: "Temp Change / ΔT (°C)",
             lblProfile: "Beam Profile Shape", optRect: "Rectangle Beam", optSolid: "Solid Cylinder (Shaft)", optHollow: "Hollow Pipe (Tube)",
             lblWidth: "Width - b (mm)", lblHeight: "Height - h (mm)", lblDiam: "Diameter - d (mm)", lblOutDiam: "Outer Diameter - D (mm)", lblThick: "Wall Thickness - t (mm)",
             lblMat1: "Compare Material 1", lblMat2: "Compare Material 2", lblMat3: "Compare Material 3",
-            calcBtn: "Run FEA & Multiphysics Analysis", printBtn: "📄 Generate Corporate PDF Report",
-            weight: "Est. Weight", 
-            stressAxial: "Axial Stress (σa)", stressBend: "Bending Stress (σb)", stressShear: "Avg Shear Stress (τ)", stressMax: "Max Principal Stress",
+            calcBtn: "Run FEA & Multiphysics Analysis", printBtn: "📄 Generate Corporate PDF Report", templateBtn: "📋 Load Sample Scenario",
+            weight: "Est. Weight", stressAxial: "Axial Stress (σa)", stressBend: "Bending Stress (σb)", stressShear: "Avg Shear Stress (τ)", stressMax: "Max Principal Stress",
             expansion: "Thermal Expansion (ΔL)", deflect: "Max Deflection (δ)", costLbl: "Total Part Cost", factor: "Safety Factor",
             safe: "SAFE (Structure holds)", fail: "CRITICAL (Material yields)", unitsExp: "mm",
             grpCustom: "➕ Add New Custom Material", customDesc: "Materials you add are saved to your browser automatically.",
-            grpList: "📂 My Saved Custom Materials",
-            lblCName: "Material Name", lblCDens: "Density (g/cm³)",
-            lblCYield: "Yield (MPa)", lblCAlpha: "Alpha (10^-6)", lblCEmod: "E. Modulus (GPa)", lblCCost: "Cost ($/kg)", 
-            btnAddMat: "Save Material", btnDel: "Delete", errFill: "Please fill all required fields correctly!",
+            grpList: "📂 My Saved Custom Materials", lblCName: "Material Name", lblCDens: "Density (g/cm³)",
+            lblCYield: "Yield (MPa)", lblCAlpha: "Alpha (10^-6)", lblCEmod: "E. Modulus (GPa)", lblCCost: "Cost ($/kg)",
+            btnAddMat: "Save Material", btnDel: "Delete", btnEdit: "Edit", errFill: "Please fill all required fields correctly!",
             densShort: "Dens:", yieldShort: "Yield:", eModShort: "E:", costShort: "Cost:", noCustomMsg: "No custom materials added yet.",
             chartTitle: "Stress vs. Yield Strength Graph", yieldLbl: "Yield Limit", stressLbl: "Max Stress",
-            geoTitle: "📐 Calculated Geometry Overview",
-            areaLbl: "Area (A)", inertiaLbl: "Inertia (I)", modulusLbl: "Modulus (Z)",
+            geoTitle: "📐 Calculated Geometry Overview", areaLbl: "Area (A)", inertiaLbl: "Inertia (I)", modulusLbl: "Modulus (Z)",
             printTitle: "Engineering Analysis Report", printDate: "Date:", printProj: "Project:", printSoft: "Generated by:",
-            sumInput: "Input Parameters Summary", sumProf: "Profile", sumDim: "Dimensions", sumBeam: "System Type",
-            forceCol: "Force (F)", lengthCol: "Length (L)"
+            sumInput: "Input Parameters Summary", sumProf: "Profile", sumDim: "Dimensions", sumBeam: "System Type", forceCol: "Force (F)", lengthCol: "Length (L)",
+            radarTitle: "📡 Material Comparison Radar Chart",
+            deformTitle: "🏗️ Deformation Animation",
+            tipBeamType: "Select how the load is applied to the structure.",
+            tipForce: "Total applied force in Newtons (N).",
+            tipLength: "Length of the beam or member in millimeters (mm).",
+            tipProfile: "Choose the cross-section shape of the beam.",
+            unitSI: "SI (mm, MPa)", unitImperial: "Imperial (in, psi)",
+            burkling: "Buckling Load", frequency: "Natural Frequency", vonMises: "Von Mises Stress", fatigueLbl: "Fatigue Safety Factor"
         },
-        "tr": {
+        tr: {
             title: "🚀 Global Engineering Material Analyzer Pro",
             tabAna: "📊 Analiz & Simülasyon", tabMat: "⚙️ Malzeme Kütüphanesi",
             grpLoad: "Statik Sistem & Yük", grpGeo: "Kesit Geometrisi", grpMat: "Malzeme Seçimi",
-            lblBeamType: "Yükleme ve Sistem Senaryosu", 
-            optAxial: "Saf Eksenel Çekme / Basma", optCantPt: "Konsol Kiriş - Uçtan Tekil Yük", optCantUdl: "Konsol Kiriş - Düzgün Yayılı Yük", optSuppPt: "Mesnetli Kiriş - Ortadan Tekil Yük", optSuppUdl: "Mesnetli Kiriş - Düzgün Yayılı Yük",
+            lblBeamType: "Yükleme ve Sistem Senaryosu", optAxial: "Saf Eksenel Çekme / Basma", optCantPt: "Konsol Kiriş - Uçtan Tekil Yük", optCantUdl: "Konsol Kiriş - Düzgün Yayılı Yük", optSuppPt: "Mesnetli Kiriş - Ortadan Tekil Yük", optSuppUdl: "Mesnetli Kiriş - Düzgün Yayılı Yük",
             lblForce: "Toplam Kuvvet - F (N)", lblLength: "Kiriş Uzunluğu - L (mm)", lblTemp: "Sıcaklık Değişimi / ΔT (°C)",
             lblProfile: "Kesit Profili (Şekli)", optRect: "Dikdörtgen Kiriş", optSolid: "Dolu Mil (Silindir)", optHollow: "İçi Boş Boru (Tüp)",
             lblWidth: "Genişlik - b (mm)", lblHeight: "Yükseklik - h (mm)", lblDiam: "Çap - d (mm)", lblOutDiam: "Dış Çap - D (mm)", lblThick: "Et Kalınlığı - t (mm)",
             lblMat1: "Kıyaslanacak Malzeme 1", lblMat2: "Kıyaslanacak Malzeme 2", lblMat3: "Kıyaslanacak Malzeme 3",
-            calcBtn: "FEA & Mukavemet Analizini Başlat", printBtn: "📄 Kurumsal PDF Raporu Çıkart",
-            weight: "Tahmini Ağırlık", 
-            stressAxial: "Eksenel Gerilme (σa)", stressBend: "Eğilme Gerilmesi (σb)", stressShear: "Ort. Kesme Gerilmesi (τ)", stressMax: "Maksimum Asal Gerilme",
+            calcBtn: "FEA & Mukavemet Analizini Başlat", printBtn: "📄 Kurumsal PDF Raporu Çıkart", templateBtn: "📋 Örnek Senaryo Yükle",
+            weight: "Tahmini Ağırlık", stressAxial: "Eksenel Gerilme (σa)", stressBend: "Eğilme Gerilmesi (σb)", stressShear: "Ort. Kesme Gerilmesi (τ)", stressMax: "Maksimum Asal Gerilme",
             expansion: "Isıl Genleşme (ΔL)", deflect: "Maks. Sehim / Esneme (δ)", costLbl: "Parça Maliyeti", factor: "Güvenlik Faktörü",
             safe: "GÜVENLİ (Yapı dayanır)", fail: "KRİTİK (Akma/Kırılma)", unitsExp: "mm",
             grpCustom: "➕ Yeni Özel Malzeme Ekle", customDesc: "Eklediğiniz malzemeler tarayıcınıza kaydedilir.",
-            grpList: "📂 Kayıtlı Özel Malzemelerim",
-            lblCName: "Malzeme Adı", lblCDens: "Yoğunluk (g/cm³)",
-            lblCYield: "Akma Day. (MPa)", lblCAlpha: "Alfa Gen. (10^-6)", lblCEmod: "E. Modülü (GPa)", lblCCost: "Fiyat ($/kg)", 
-            btnAddMat: "Kaydet", btnDel: "Sil", errFill: "Lütfen gerekli tüm alanları eksiksiz doldurun!",
+            grpList: "📂 Kayıtlı Özel Malzemelerim", lblCName: "Malzeme Adı", lblCDens: "Yoğunluk (g/cm³)",
+            lblCYield: "Akma Day. (MPa)", lblCAlpha: "Alfa Gen. (10^-6)", lblCEmod: "E. Modülü (GPa)", lblCCost: "Fiyat ($/kg)",
+            btnAddMat: "Kaydet", btnDel: "Sil", btnEdit: "Düzenle", errFill: "Lütfen gerekli tüm alanları eksiksiz doldurun!",
             densShort: "Yoğ:", yieldShort: "Day:", eModShort: "E:", costShort: "Fiyat:", noCustomMsg: "Henüz özel malzeme eklenmedi.",
             chartTitle: "Maks. Gerilme ve Akma Dayanımı Grafiği", yieldLbl: "Akma Sınırı", stressLbl: "Gerilme",
-            geoTitle: "📐 Geometri Hesaplama Özeti",
-            areaLbl: "Alan (A)", inertiaLbl: "Atalet (I)", modulusLbl: "Mukavemet Momenti (Z)",
+            geoTitle: "📐 Geometri Hesaplama Özeti", areaLbl: "Alan (A)", inertiaLbl: "Atalet (I)", modulusLbl: "Mukavemet Momenti (Z)",
             printTitle: "Mühendislik Analiz Raporu", printDate: "Tarih:", printProj: "Proje:", printSoft: "Oluşturan:",
-            sumInput: "Girdi Parametreleri Özeti", sumProf: "Profil", sumDim: "Boyutlar", sumBeam: "Sistem Tipi",
-            forceCol: "Kuvvet (F)", lengthCol: "Uzunluk (L)"
+            sumInput: "Girdi Parametreleri Özeti", sumProf: "Profil", sumDim: "Boyutlar", sumBeam: "Sistem Tipi", forceCol: "Kuvvet (F)", lengthCol: "Uzunluk (L)",
+            radarTitle: "📡 Malzeme Karşılaştırma Radar Grafiği",
+            deformTitle: "🏗️ Deformasyon Animasyonu",
+            tipBeamType: "Yükün yapıya nasıl uygulandığını seçin.",
+            tipForce: "Toplam uygulanan kuvvet (Newton).",
+            tipLength: "Kiriş veya parça uzunluğu (mm).",
+            tipProfile: "Kirişin kesit şeklini seçin.",
+            unitSI: "SI (mm, MPa)", unitImperial: "Imperial (in, psi)",
+            burkling: "Burkulma Yükü", frequency: "Doğal Frekans", vonMises: "Von Mises Gerilmesi", fatigueLbl: "Yorulma Güvenlik Faktörü"
         }
     };
 
     let currentLang = "tr";
+    let currentUnitSystem = "SI";
+    let expertMode = false;
+    let materials = { ...defaultMaterials };
+    let resultsCalculated = false;
+
+    // ========== FONKSİYONLAR ==========
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById('tab-' + tabId).classList.add('active');
+        document.getElementById('btn-' + tabId).classList.add('active');
+        if (tabId === 'materials') {
+            document.getElementById('resultsArea').style.display = 'none';
+        } else if (tabId === 'analysis' && resultsCalculated) {
+            document.getElementById('resultsArea').style.display = 'block';
+        }
+    }
 
     function loadSavedMaterials() {
         const saved = localStorage.getItem('engineeringMatData');
-        if(saved) {
+        if (saved) {
             try {
                 const parsed = JSON.parse(saved);
                 materials = { ...defaultMaterials, ...parsed };
             } catch(e) {
-                console.warn("Saved materials could not be parsed, using defaults.");
+                console.warn("Saved materials parse error");
                 materials = { ...defaultMaterials };
             }
         } else {
@@ -487,8 +535,14 @@
 
     function saveCustomMaterials() {
         let customOnly = {};
-        for(let key in materials) if(key.startsWith("custom_")) customOnly[key] = materials[key];
+        for (let key in materials) {
+            if (key.startsWith("custom_")) customOnly[key] = materials[key];
+        }
         localStorage.setItem('engineeringMatData', JSON.stringify(customOnly));
+    }
+
+    function saveAllMaterials() {
+        localStorage.setItem('engineeringMatData', JSON.stringify(materials));
     }
 
     function renderCustomList() {
@@ -496,50 +550,82 @@
         const t = dict[currentLang];
         container.innerHTML = "";
         let hasCustom = false;
-        for(let key in materials) {
-            if(key.startsWith("custom_")) {
+        for (let key in materials) {
+            if (key.startsWith("custom_")) {
                 hasCustom = true;
                 const m = materials[key];
                 container.innerHTML += `<div class="custom-item"><span><strong>${m.name}</strong> • ${t.densShort} ${m.density} • ${t.yieldShort} ${m.yield} • ${t.eModShort} ${m.eMod || '-'} • ${t.costShort} $${m.cost || '-'}</span><button class="del-btn" onclick="deleteMaterial('${key}')">${t.btnDel}</button></div>`;
             }
         }
-        if(!hasCustom) container.innerHTML = `<div style="padding:15px; color:#64748b; font-size:13px; text-align:center; font-style: italic;">${t.noCustomMsg}</div>`;
+        if (!hasCustom) container.innerHTML = `<div style="padding:15px; color:#64748b; font-size:13px; text-align:center; font-style: italic;">${t.noCustomMsg}</div>`;
     }
 
-    // YENİ: OPTGROUP (Kategorize) ile Menü Doldurma
+    function renderExpertList() {
+        const container = document.getElementById('expertListContainer');
+        if (!expertMode) { container.style.display = 'none'; return; }
+        container.style.display = 'block';
+        container.innerHTML = "<h4 style='margin-top:20px;'>🔧 Varsayılan Malzemeleri Düzenle</h4>";
+        for (let key in defaultMaterials) {
+            const m = materials[key];
+            container.innerHTML += `
+                <div class="custom-item">
+                    <span><strong>${m.name}</strong> (${key})</span>
+                    <button class="edit-btn" onclick="editMaterial('${key}')">${dict[currentLang].btnEdit}</button>
+                </div>`;
+        }
+    }
+
+    function toggleExpertMode() {
+        expertMode = !expertMode;
+        document.getElementById('btnExpert').textContent = expertMode ? "🔧 Uzman Modu (Kapat)" : "🔧 Uzman Modu (Varsayılanları Düzenle)";
+        renderExpertList();
+    }
+
+    function editMaterial(key) {
+        const m = materials[key];
+        const newName = prompt("Malzeme adı:", m.name);
+        if (newName === null) return;
+        const newDens = parseFloat(prompt("Yoğunluk (g/cm³):", m.density));
+        const newYield = parseFloat(prompt("Akma Dayanımı (MPa):", m.yield));
+        const newAlpha = parseFloat(prompt("Alfa (10^-6):", m.alpha)) || 0;
+        const newEmod = parseFloat(prompt("Elastisite Modülü (GPa):", m.eMod));
+        const newCost = parseFloat(prompt("Fiyat ($/kg):", m.cost)) || 0;
+        const newFatigue = parseFloat(prompt("Yorulma Limiti (MPa):", m.fatigue || 0)) || 0;
+        if (newName && newDens && newYield && newEmod) {
+            materials[key] = { ...m, name: newName, density: newDens, yield: newYield, alpha: newAlpha, eMod: newEmod, cost: newCost, fatigue: newFatigue };
+            saveAllMaterials();
+            populateDropdowns();
+            renderCustomList();
+            renderExpertList();
+        } else {
+            alert(dict[currentLang].errFill);
+        }
+    }
+
     function populateDropdowns() {
         const selects = ['mat1', 'mat2', 'mat3'];
         const vals = selects.map(id => document.getElementById(id).value);
-        
         let opts = "";
-        
         for (let catKey in categoryNames) {
             let catGroupHtml = `<optgroup label="${categoryNames[catKey][currentLang]}">`;
             let hasItems = false;
-            
             for (let matKey in materials) {
-                if ((catKey === 'custom' && matKey.startsWith('custom_')) || 
-                    (materials[matKey].category === catKey)) {
+                if ((catKey === 'custom' && matKey.startsWith('custom_')) || (materials[matKey].category === catKey)) {
                     catGroupHtml += `<option value="${matKey}">${materials[matKey].name}</option>`;
                     hasItems = true;
                 }
             }
             catGroupHtml += `</optgroup>`;
-            if(hasItems) opts += catGroupHtml;
+            if (hasItems) opts += catGroupHtml;
         }
-
-        selects.forEach((id, i) => { 
-            document.getElementById(id).innerHTML = opts; 
-            if(vals[i] && materials[vals[i]]) {
-                document.getElementById(id).value = vals[i];
-            }
+        selects.forEach((id, i) => {
+            document.getElementById(id).innerHTML = opts;
+            if (vals[i] && materials[vals[i]]) document.getElementById(id).value = vals[i];
         });
-        
-        // Varsayılan seçimler (ilk kez)
-        if(!vals[0] || !vals[1] || !vals[2]) {
-            if(!vals[0]) document.getElementById('mat1').value = "alu7075";
-            if(!vals[1]) document.getElementById('mat2').value = "steel4140";
-            if(!vals[2]) document.getElementById('mat3').value = "pa612_cf15";
+        if (!vals[0] || !vals[1] || !vals[2]) {
+            if (!vals[0]) document.getElementById('mat1').value = "alu7075";
+            if (!vals[1]) document.getElementById('mat2').value = "steel4140";
+            if (!vals[2]) document.getElementById('mat3').value = "pa612_cf15";
         }
     }
 
@@ -550,24 +636,16 @@
         const alpha = parseFloat(document.getElementById('c_alpha').value) || 0;
         const eMod = parseFloat(document.getElementById('c_emod').value);
         const cost = parseFloat(document.getElementById('c_cost').value) || 0;
-        
-        if(!name || !dens || !yieldMpa || !eMod) {
-            alert(dict[currentLang].errFill);
-            return;
-        }
-        materials["custom_" + Date.now()] = { name, density: dens, yield: yieldMpa, alpha, eMod, cost, category: "custom" };
-        saveCustomMaterials(); 
-        populateDropdowns(); 
-        renderCustomList();
+        if (!name || !dens || !yieldMpa || !eMod) return alert(dict[currentLang].errFill);
+        materials["custom_" + Date.now()] = { name, density: dens, yield: yieldMpa, alpha, eMod, cost, category: "custom", fatigue: 0.6 * yieldMpa, descTr: "Özel malzeme", descEn: "Custom material" };
+        saveCustomMaterials(); populateDropdowns(); renderCustomList();
         ['c_name', 'c_dens', 'c_yield', 'c_alpha', 'c_emod', 'c_cost'].forEach(id => document.getElementById(id).value = "");
     }
 
     function deleteMaterial(key) {
-        if(materials[key] && key.startsWith('custom_')) { 
-            delete materials[key]; 
-            saveCustomMaterials(); 
-            populateDropdowns(); 
-            renderCustomList(); 
+        if (materials[key] && key.startsWith('custom_')) {
+            delete materials[key];
+            saveCustomMaterials(); populateDropdowns(); renderCustomList();
         }
     }
 
@@ -577,6 +655,7 @@
         document.getElementById('geo_' + val).classList.add('active');
         document.querySelectorAll('svg.geo-inputs').forEach(el => el.classList.remove('active'));
         document.getElementById('svg_' + val).classList.add('active');
+        updateDynamicSVG();
     }
 
     function changeBeam() {
@@ -585,78 +664,173 @@
         document.getElementById('svg_' + val).classList.add('active');
     }
 
-    function init() {
-        loadSavedMaterials(); 
-        populateDropdowns();
-        document.getElementById('currentDate').innerText = new Date().toLocaleDateString();
-        updateLangUI();
+    function updateDynamicSVG() {
+        const profile = document.getElementById('profileType').value;
+        if (profile === 'rect') {
+            const b = parseFloat(document.getElementById('rect_b').value) || 20;
+            const h = parseFloat(document.getElementById('rect_h').value) || 30;
+            const maxDim = Math.max(b, h);
+            const scale = 80 / maxDim;
+            const w = b * scale, hh = h * scale;
+            const rect = document.getElementById('rect_shape');
+            rect.setAttribute('x', 50 - w/2);
+            rect.setAttribute('y', 50 - hh/2);
+            rect.setAttribute('width', w);
+            rect.setAttribute('height', hh);
+            document.getElementById('rect_label_b').textContent = `b=${b}`;
+            document.getElementById('rect_label_h').textContent = `h=${h}`;
+        } else if (profile === 'solid') {
+            const d = parseFloat(document.getElementById('solid_d').value) || 25;
+            const r = Math.min(40, d/2 * 2);
+            document.getElementById('solid_circle').setAttribute('r', r);
+            document.querySelector('#svg_solid text').textContent = `d=${d}`;
+        } else if (profile === 'hollow') {
+            const D = parseFloat(document.getElementById('hollow_d').value) || 30;
+            const t = parseFloat(document.getElementById('hollow_t').value) || 3;
+            const outerR = Math.min(40, D/2 * 2);
+            const innerR = Math.max(5, outerR - t * 2);
+            document.getElementById('hollow_outer').setAttribute('r', outerR);
+            document.getElementById('hollow_inner').setAttribute('r', innerR);
+        }
+    }
+
+    function filterMaterials() {
+        const query = document.getElementById('matSearch').value.toLowerCase();
+        const selects = ['mat1', 'mat2', 'mat3'];
+        selects.forEach(id => {
+            const select = document.getElementById(id);
+            const options = select.querySelectorAll('option');
+            options.forEach(opt => {
+                const text = opt.textContent.toLowerCase();
+                opt.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
+    }
+
+    function showMaterialInfo(selectId) {
+        const key = document.getElementById(selectId).value;
+        const mat = materials[key];
+        const infoBox = document.getElementById('materialInfoBox');
+        if (mat) {
+            const desc = currentLang === 'tr' ? (mat.descTr || 'Açıklama yok') : (mat.descEn || 'No description');
+            infoBox.innerHTML = `<strong>${mat.name}</strong><br>${desc}`;
+            infoBox.style.display = 'block';
+        }
+    }
+
+    function updateMatInfoIcon(select) {
+        // Görsel geri bildirim için gerekirse
+    }
+
+    function toggleTheme() {
+        document.getElementById('mainContainer').classList.toggle('light-theme');
+        const btn = document.getElementById('themeBtn');
+        btn.textContent = document.getElementById('mainContainer').classList.contains('light-theme') ? '🌙 Koyu Tema' : '☀️ Açık Tema';
     }
 
     function toggleLang() {
         currentLang = currentLang === "en" ? "tr" : "en";
         updateLangUI();
-        if(resultsCalculated) calculate(); // Sonuçları yeni dile göre güncelle
+        if (resultsCalculated) calculate();
     }
 
     function updateLangUI() {
         const t = dict[currentLang];
         document.getElementById('appTitle').innerText = t.title;
-        document.getElementById('btn-analysis').innerText = t.tabAna; 
+        document.getElementById('btn-analysis').innerText = t.tabAna;
         document.getElementById('btn-materials').innerText = t.tabMat;
-        
-        document.getElementById('grpLoad').innerHTML = `<span class="step-num">1</span> ` + t.grpLoad; 
-        document.getElementById('grpGeo').innerHTML = `<span class="step-num">2</span> ` + t.grpGeo; 
+        document.getElementById('grpLoad').innerHTML = `<span class="step-num">1</span> ` + t.grpLoad;
+        document.getElementById('grpGeo').innerHTML = `<span class="step-num">2</span> ` + t.grpGeo;
         document.getElementById('grpMat').innerHTML = `<span class="step-num">3</span> ` + t.grpMat;
-        
-        document.getElementById('lblBeamType').innerText = t.lblBeamType;
-        document.getElementById('optAxial').innerText = t.optAxial; 
+        document.getElementById('lblBeamType').innerHTML = t.lblBeamType + ` <span class="tooltip">ⓘ<span class="tooltiptext">${t.tipBeamType}</span></span>`;
+        document.getElementById('optAxial').innerText = t.optAxial;
         document.getElementById('optCantPt').innerText = t.optCantPt;
-        document.getElementById('optCantUdl').innerText = t.optCantUdl; 
+        document.getElementById('optCantUdl').innerText = t.optCantUdl;
         document.getElementById('optSuppPt').innerText = t.optSuppPt;
         document.getElementById('optSuppUdl').innerText = t.optSuppUdl;
-        
-        document.getElementById('lblForce').innerText = t.lblForce; 
-        document.getElementById('lblLength').innerText = t.lblLength; 
+        document.getElementById('lblForce').innerHTML = t.lblForce + ` <span class="tooltip">ⓘ<span class="tooltiptext">${t.tipForce}</span></span>`;
+        document.getElementById('lblLength').innerHTML = t.lblLength + ` <span class="tooltip">ⓘ<span class="tooltiptext">${t.tipLength}</span></span>`;
         document.getElementById('lblTemp').innerText = t.lblTemp;
-        
-        document.getElementById('lblProfile').innerText = t.lblProfile;
-        document.getElementById('optRect').innerText = t.optRect; 
-        document.getElementById('optSolid').innerText = t.optSolid; 
+        document.getElementById('lblProfile').innerHTML = t.lblProfile + ` <span class="tooltip">ⓘ<span class="tooltiptext">${t.tipProfile}</span></span>`;
+        document.getElementById('optRect').innerText = t.optRect;
+        document.getElementById('optSolid').innerText = t.optSolid;
         document.getElementById('optHollow').innerText = t.optHollow;
-        document.getElementById('lblWidth').innerText = t.lblWidth; 
-        document.getElementById('lblHeight').innerText = t.lblHeight; 
-        document.getElementById('lblDiam').innerText = t.lblDiam; 
-        document.getElementById('lblOutDiam').innerText = t.lblOutDiam; 
+        document.getElementById('lblWidth').innerText = t.lblWidth;
+        document.getElementById('lblHeight').innerText = t.lblHeight;
+        document.getElementById('lblDiam').innerText = t.lblDiam;
+        document.getElementById('lblOutDiam').innerText = t.lblOutDiam;
         document.getElementById('lblThick').innerText = t.lblThick;
-        
-        document.getElementById('lblMat1').innerText = t.lblMat1; 
-        document.getElementById('lblMat2').innerText = t.lblMat2; 
-        document.getElementById('lblMat3').innerText = t.lblMat3;
-        
-        document.getElementById('calcBtn').innerText = t.calcBtn; 
+        document.getElementById('lblMat1').innerHTML = t.lblMat1 + ` <span class="info-icon" onclick="showMaterialInfo('mat1')">ⓘ</span>`;
+        document.getElementById('lblMat2').innerHTML = t.lblMat2 + ` <span class="info-icon" onclick="showMaterialInfo('mat2')">ⓘ</span>`;
+        document.getElementById('lblMat3').innerHTML = t.lblMat3 + ` <span class="info-icon" onclick="showMaterialInfo('mat3')">ⓘ</span>`;
+        document.getElementById('calcBtn').innerText = t.calcBtn;
         document.getElementById('printBtn').innerText = t.printBtn;
-        document.getElementById('grpCustom').innerText = t.grpCustom; 
+        document.getElementById('templateBtn').innerText = t.templateBtn;
+        document.getElementById('grpCustom').innerText = t.grpCustom;
         document.getElementById('customDesc').innerText = t.customDesc;
         document.getElementById('grpList').innerText = t.grpList;
-        
-        document.getElementById('lblCName').innerText = t.lblCName; 
-        document.getElementById('lblCDens').innerText = t.lblCDens; 
-        document.getElementById('lblCYield').innerText = t.lblCYield; 
+        document.getElementById('lblCName').innerText = t.lblCName;
+        document.getElementById('lblCDens').innerText = t.lblCDens;
+        document.getElementById('lblCYield').innerText = t.lblCYield;
         document.getElementById('lblCAlpha').innerText = t.lblCAlpha;
-        document.getElementById('lblCEmod').innerText = t.lblCEmod; 
+        document.getElementById('lblCEmod').innerText = t.lblCEmod;
         document.getElementById('lblCCost').innerText = t.lblCCost;
         document.getElementById('btnAddMat').innerText = t.btnAddMat;
         document.getElementById('chartTitle').innerText = t.chartTitle;
-
-        document.getElementById('printTitle').innerText = t.printTitle; 
+        document.getElementById('printTitle').innerText = t.printTitle;
         document.getElementById('printDateLbl').innerText = t.printDate;
-        document.getElementById('printProjLbl').innerText = t.printProj; 
+        document.getElementById('printProjLbl').innerText = t.printProj;
         document.getElementById('printSoftLbl').innerText = t.printSoft;
-        
-        document.getElementById('c_name').placeholder = currentLang === "en" ? "e.g. PC-CF20" : "Örn: PC-CF20";
-        
-        populateDropdowns(); // OptGroup başlıkları güncellensin
-        renderCustomList(); 
+        document.getElementById('radarTitle').innerText = t.radarTitle;
+        document.getElementById('deformTitle').innerText = t.deformTitle;
+        document.getElementById('btnExpert').textContent = expertMode ? "🔧 Uzman Modu (Kapat)" : "🔧 Uzman Modu (Varsayılanları Düzenle)";
+        populateDropdowns();
+        renderCustomList();
+        renderExpertList();
+    }
+
+    function setUnitSystem(system) {
+        currentUnitSystem = system;
+        document.getElementById('unitSI').classList.toggle('active', system === 'SI');
+        document.getElementById('unitImperial').classList.toggle('active', system === 'Imperial');
+        if (resultsCalculated) calculate();
+    }
+
+    function loadTemplate() {
+        const scenario = document.getElementById('beamType').value;
+        if (scenario === 'axial') {
+            document.getElementById('force').value = 10000;
+            document.getElementById('length').value = 200;
+            document.getElementById('delta_t').value = 50;
+            document.getElementById('profileType').value = 'solid';
+            document.getElementById('solid_d').value = 20;
+            document.getElementById('mat1').value = 'steel304';
+            document.getElementById('mat2').value = 'alu6061';
+            document.getElementById('mat3').value = 'ti6al4v';
+        } else if (scenario.includes('cant')) {
+            document.getElementById('force').value = 2000;
+            document.getElementById('length').value = 300;
+            document.getElementById('delta_t').value = 0;
+            document.getElementById('profileType').value = 'rect';
+            document.getElementById('rect_b').value = 30;
+            document.getElementById('rect_h').value = 50;
+            document.getElementById('mat1').value = 'alu6061';
+            document.getElementById('mat2').value = 'steelA36';
+            document.getElementById('mat3').value = 'pa612_cf15';
+        } else {
+            document.getElementById('force').value = 5000;
+            document.getElementById('length').value = 400;
+            document.getElementById('delta_t').value = 0;
+            document.getElementById('profileType').value = 'hollow';
+            document.getElementById('hollow_d').value = 40;
+            document.getElementById('hollow_t').value = 5;
+            document.getElementById('mat1').value = 'steel4140';
+            document.getElementById('mat2').value = 'alu7075';
+            document.getElementById('mat3').value = 'cf_epoxy';
+        }
+        changeProfile();
+        updateDynamicSVG();
+        calculate();
     }
 
     function calculate() {
@@ -666,169 +840,294 @@
         const deltaT = parseFloat(document.getElementById('delta_t').value) || 0;
         const profile = document.getElementById('profileType').value;
         const t = dict[currentLang];
-        
-        if(!force || !length || force <= 0 || length <= 0) {
-            alert(t.errFill);
-            return;
-        }
 
-        let A = 0, I = 0, Z = 0; 
-        let dimensionsText = ""; 
+        // Hata mesajlarını temizle
+        document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('input').forEach(el => el.classList.remove('error'));
+
+        let valid = true;
+        if (!force || force <= 0) {
+            document.getElementById('force').classList.add('error');
+            document.getElementById('errForce').textContent = t.errFill;
+            document.getElementById('errForce').style.display = 'block';
+            valid = false;
+        }
+        if (!length || length <= 0) {
+            document.getElementById('length').classList.add('error');
+            document.getElementById('errLength').textContent = t.errFill;
+            document.getElementById('errLength').style.display = 'block';
+            valid = false;
+        }
+        if (!valid) return;
+
+        let A = 0, I = 0, Z = 0;
+        let dimensionsText = "";
         let profileName = "";
 
-        if(profile === 'rect') {
-            const b = parseFloat(document.getElementById('rect_b').value); 
+        if (profile === 'rect') {
+            const b = parseFloat(document.getElementById('rect_b').value);
             const h = parseFloat(document.getElementById('rect_h').value);
-            if(!b || !h || b <= 0 || h <= 0) return alert(t.errFill);
-            A = b * h; 
-            I = (b * Math.pow(h, 3)) / 12; 
-            Z = I / (h / 2);
-            dimensionsText = `b: ${b}mm, h: ${h}mm`; 
-            profileName = t.optRect;
-        } else if(profile === 'solid') {
+            if (!b || !h || b <= 0 || h <= 0) return alert(t.errFill);
+            A = b * h; I = (b * Math.pow(h, 3)) / 12; Z = I / (h / 2);
+            dimensionsText = `b: ${b}mm, h: ${h}mm`; profileName = t.optRect;
+        } else if (profile === 'solid') {
             const d = parseFloat(document.getElementById('solid_d').value);
-            if(!d || d <= 0) return alert(t.errFill);
-            A = (Math.PI * Math.pow(d, 2)) / 4; 
-            I = (Math.PI * Math.pow(d, 4)) / 64; 
-            Z = (Math.PI * Math.pow(d, 3)) / 32;
-            dimensionsText = `d: ${d}mm`; 
-            profileName = t.optSolid;
-        } else if(profile === 'hollow') {
-            const D = parseFloat(document.getElementById('hollow_d').value); 
+            if (!d || d <= 0) return alert(t.errFill);
+            A = (Math.PI * Math.pow(d, 2)) / 4; I = (Math.PI * Math.pow(d, 4)) / 64; Z = (Math.PI * Math.pow(d, 3)) / 32;
+            dimensionsText = `d: ${d}mm`; profileName = t.optSolid;
+        } else if (profile === 'hollow') {
+            const D = parseFloat(document.getElementById('hollow_d').value);
             const th = parseFloat(document.getElementById('hollow_t').value);
-            if(!D || !th || th >= D/2 || D <= 0 || th <= 0) return alert(t.errFill + " (Thick < D/2)");
+            if (!D || !th || th >= D/2 || D <= 0 || th <= 0) return alert(t.errFill + " (Thick < D/2)");
             const d_in = D - (2 * th);
-            A = (Math.PI / 4) * (Math.pow(D, 2) - Math.pow(d_in, 2)); 
-            I = (Math.PI / 64) * (Math.pow(D, 4) - Math.pow(d_in, 4)); 
-            Z = I / (D / 2);
-            dimensionsText = `D: ${D}mm, t: ${th}mm`; 
-            profileName = t.optHollow;
+            A = (Math.PI / 4) * (Math.pow(D, 2) - Math.pow(d_in, 2)); I = (Math.PI / 64) * (Math.pow(D, 4) - Math.pow(d_in, 4)); Z = I / (D / 2);
+            dimensionsText = `D: ${D}mm, t: ${th}mm`; profileName = t.optHollow;
         }
 
         const volume = (A * length) / 1000; // cm³
 
-        document.getElementById('geoSummaryDiv').innerHTML = `
-            ${t.geoTitle} <br>
-            ${t.areaLbl}: <span>${A.toFixed(1)} mm²</span> | ${t.inertiaLbl}: <span>${I.toFixed(1)} mm⁴</span> | ${t.modulusLbl}: <span>${Z.toFixed(1)} mm³</span>
-        `;
-        
-        let beamName = "";
-        const optionMap = {
-            "axial": "optAxial",
-            "cant_pt": "optCantPt",
-            "cant_udl": "optCantUdl",
-            "supp_pt": "optSuppPt",
-            "supp_udl": "optSuppUdl"
-        };
-        beamName = document.getElementById(optionMap[beamType] || "optSuppPt").textContent;
-        
+        document.getElementById('geoSummaryDiv').innerHTML = `${t.geoTitle} <br> ${t.areaLbl}: <span>${A.toFixed(1)} mm²</span> | ${t.inertiaLbl}: <span>${I.toFixed(1)} mm⁴</span> | ${t.modulusLbl}: <span>${Z.toFixed(1)} mm³</span>`;
+
+        const optionMap = { "axial": "optAxial", "cant_pt": "optCantPt", "cant_udl": "optCantUdl", "supp_pt": "optSuppPt", "supp_udl": "optSuppUdl" };
+        const beamName = document.getElementById(optionMap[beamType] || "optSuppPt").textContent;
+
         document.getElementById('printSummaryTable').innerHTML = `
             <thead>
                 <tr><th colspan="5" style="background:#38bdf8; color:#000; text-align:center; font-size:14px;">${t.sumInput}</th></tr>
-                <tr>
-                    <th>${t.sumBeam}</th>
-                    <th>${t.forceCol}</th>
-                    <th>${t.lengthCol}</th>
-                    <th>${t.sumProf}</th>
-                    <th>${t.sumDim}</th>
-                </tr>
+                <tr><th>${t.sumBeam}</th><th>${t.forceCol}</th><th>${t.lengthCol}</th><th>${t.sumProf}</th><th>${t.sumDim}</th></tr>
             </thead>
             <tbody>
                 <tr><td><b>${beamName}</b></td><td><b>${force} N</b></td><td><b>${length} mm</b></td><td>${profileName}</td><td>${dimensionsText}</td></tr>
-            </tbody>
-        `;
+            </tbody>`;
 
         let maxMoment = 0;
-        let isAxialMode = (beamType === 'axial');
-        
-        if(beamType === 'cant_pt') maxMoment = force * length; 
+        const isAxialMode = (beamType === 'axial');
+        if (beamType === 'cant_pt') maxMoment = force * length;
         else if (beamType === 'cant_udl') maxMoment = (force * length) / 2;
         else if (beamType === 'supp_pt') maxMoment = (force * length) / 4;
         else if (beamType === 'supp_udl') maxMoment = (force * length) / 8;
 
-        const axialStress = isAxialMode ? (force / A) : 0; 
-        const bendingStress = isAxialMode ? 0 : (maxMoment / Z); 
-        const shearStress = isAxialMode ? 0 : (force / A); 
-        
-        const maxStress = Math.max(axialStress, bendingStress); 
-        if(maxStress <= 0) {
-            alert("Stress calculation error. Check inputs.");
-            return;
+        const axialStress = isAxialMode ? (force / A) : 0;
+        const bendingStress = isAxialMode ? 0 : (maxMoment / Z);
+        const shearStress = isAxialMode ? 0 : (force / A);
+        const maxStress = Math.max(axialStress, bendingStress);
+        const vonMises = Math.sqrt(Math.pow(axialStress, 2) + 3 * Math.pow(shearStress, 2));
+
+        // Burkulma (sadece basma durumunda anlamlı)
+        let bucklingLoad = Infinity;
+        if (isAxialMode && force < 0) { // Basma
+            const K = 1; // basit mesnet
+            bucklingLoad = (Math.PI * Math.PI * materials[document.getElementById('mat1').value].eMod * 1000 * I) / Math.pow(K * length, 2);
         }
 
         const keys = [document.getElementById('mat1').value, document.getElementById('mat2').value, document.getElementById('mat3').value];
         let cardsHtml = "", chartHtml = "";
-        
-        let maxGraphValue = maxStress;
-        keys.forEach(key => { 
-            if(materials[key] && materials[key].yield > maxGraphValue) maxGraphValue = materials[key].yield; 
-        });
-        maxGraphValue = maxGraphValue * 1.15; 
+        let maxGraphValue = Math.max(maxStress, ...keys.map(k => materials[k].yield));
+        maxGraphValue *= 1.15;
+
+        const radarData = [];
 
         keys.forEach(key => {
-            if(!materials[key]) return; // Geçersiz malzeme koruması
+            if (!materials[key]) return;
             const mat = materials[key];
-            const weight = volume * mat.density; 
+            const weight = volume * mat.density;
             const factor = mat.yield / maxStress;
             const expansion = length * (mat.alpha * 0.000001) * deltaT;
             const isSafe = factor >= 1;
-            
-            let eModulus = mat.eMod || 1; 
+
             let deflection = 0;
-            
-            if(isAxialMode) deflection = (force * length) / ((eModulus * 1000) * A); 
+            const eModulus = mat.eMod || 1;
+            if (isAxialMode) deflection = (force * length) / ((eModulus * 1000) * A);
             else if (beamType === 'cant_pt') deflection = (force * Math.pow(length, 3)) / (3 * (eModulus * 1000) * I);
             else if (beamType === 'cant_udl') deflection = (force * Math.pow(length, 3)) / (8 * (eModulus * 1000) * I);
             else if (beamType === 'supp_pt') deflection = (force * Math.pow(length, 3)) / (48 * (eModulus * 1000) * I);
             else if (beamType === 'supp_udl') deflection = (5 * force * Math.pow(length, 3)) / (384 * (eModulus * 1000) * I);
-            
+
             const totalCost = (weight / 1000) * (mat.cost || 0);
+            const frequency = (1 / (2 * Math.PI)) * Math.sqrt((eModulus * 1000 * I) / (mat.density * A * Math.pow(length, 3)));
+            const fatigueFactor = (mat.fatigue || 0) > 0 ? (mat.fatigue / maxStress) : Infinity;
+
+            // Birim dönüşümü
+            const unitFactor = currentUnitSystem === 'Imperial' ? 25.4 : 1; // mm -> inch
+            const stressUnit = currentUnitSystem === 'Imperial' ? 0.000145038 : 1; // MPa -> psi
+
+            const displayWeight = currentUnitSystem === 'Imperial' ? weight * 0.00220462 : weight; // g -> lb
+            const displayDeflection = currentUnitSystem === 'Imperial' ? deflection / 25.4 : deflection;
+            const displayLength = currentUnitSystem === 'Imperial' ? length / 25.4 : length;
+            const displayStress = maxStress * stressUnit;
+            const displayYield = mat.yield * stressUnit;
+            const displayCost = totalCost;
 
             cardsHtml += `
                 <div class="card" style="border-color: ${isSafe ? '#10b981' : '#ef4444'}">
-                    <h4>${mat.name} <span class="cost-badge">$${totalCost.toFixed(2)}</span></h4>
-                    <div class="data-row"><span>${t.weight}:</span> <span>${weight.toFixed(1)} g</span></div>
-                    <div class="data-row"><span>${t.expansion}:</span> <span style="color:#38bdf8">${expansion.toFixed(3)} ${t.unitsExp}</span></div>
-                    <div class="data-row"><span>${t.deflect}:</span> <span style="color:var(--deflect); font-weight:bold;">${deflection.toFixed(2)} mm</span></div>
-                    
+                    <h4>${mat.name} <span class="cost-badge">$${displayCost.toFixed(2)}</span></h4>
+                    <div class="data-row"><span>${t.weight}:</span> <span>${displayWeight.toFixed(2)} ${currentUnitSystem === 'Imperial' ? 'lb' : 'g'}</span></div>
+                    <div class="data-row"><span>${t.expansion}:</span> <span style="color:#38bdf8">${expansion.toFixed(3)} ${currentUnitSystem === 'Imperial' ? 'in' : 'mm'}</span></div>
+                    <div class="data-row"><span>${t.deflect}:</span> <span style="color:var(--deflect); font-weight:bold;">${displayDeflection.toFixed(3)} ${currentUnitSystem === 'Imperial' ? 'in' : 'mm'}</span></div>
                     <div class="stress-box">
-                        <div class="stress-row"><span>${t.stressAxial}:</span> <span>${axialStress.toFixed(1)} MPa</span></div>
-                        <div class="stress-row"><span>${t.stressBend}:</span> <span>${bendingStress.toFixed(1)} MPa</span></div>
-                        <div class="stress-row"><span>${t.stressShear}:</span> <span>${shearStress.toFixed(1)} MPa</span></div>
+                        <div class="stress-row"><span>${t.stressAxial}:</span> <span>${(axialStress * stressUnit).toFixed(1)} ${currentUnitSystem === 'Imperial' ? 'psi' : 'MPa'}</span></div>
+                        <div class="stress-row"><span>${t.stressBend}:</span> <span>${(bendingStress * stressUnit).toFixed(1)} ${currentUnitSystem === 'Imperial' ? 'psi' : 'MPa'}</span></div>
+                        <div class="stress-row"><span>${t.stressShear}:</span> <span>${(shearStress * stressUnit).toFixed(1)} ${currentUnitSystem === 'Imperial' ? 'psi' : 'MPa'}</span></div>
+                        <div class="stress-row"><span>${t.vonMises}:</span> <span>${(vonMises * stressUnit).toFixed(1)} ${currentUnitSystem === 'Imperial' ? 'psi' : 'MPa'}</span></div>
                     </div>
-                    
-                    <div class="highlight-row"><span>${t.stressMax}:</span> <span>${maxStress.toFixed(1)} MPa</span></div>
+                    <div class="highlight-row"><span>${t.stressMax}:</span> <span>${displayStress.toFixed(1)} ${currentUnitSystem === 'Imperial' ? 'psi' : 'MPa'}</span></div>
                     <div class="data-row" style="margin-top:10px;"><span>${t.factor}:</span> <span>${factor.toFixed(2)}</span></div>
+                    ${bucklingLoad !== Infinity ? `<div class="data-row"><span>${t.burkling}:</span> <span>${(bucklingLoad * (currentUnitSystem === 'Imperial' ? 0.000145038 : 1)).toFixed(1)} ${currentUnitSystem === 'Imperial' ? 'psi' : 'N'}</span></div>` : ''}
+                    <div class="data-row"><span>${t.frequency}:</span> <span>${frequency.toFixed(2)} Hz</span></div>
+                    <div class="data-row"><span>${t.fatigueLbl}:</span> <span>${fatigueFactor === Infinity ? '∞' : fatigueFactor.toFixed(2)}</span></div>
                     <div class="status ${isSafe ? 'safe' : 'fail'}">${isSafe ? t.safe : t.fail}</div>
-                </div>
-            `;
-            
-            let yieldPercent = Math.min((mat.yield / maxGraphValue) * 100, 100);
-            let stressPercent = (maxStress / maxGraphValue) * 100;
-            let displayStress = Math.min(stressPercent, 100);
-            let barColor = isSafe ? '#10b981' : '#ef4444'; 
+                </div>`;
 
+            // Bar grafik
+            const yieldPercent = Math.min((mat.yield / maxGraphValue) * 100, 100);
+            const stressPercent = Math.min((maxStress / maxGraphValue) * 100, 100);
             chartHtml += `
                 <div class="bar-row">
                     <div class="bar-label">${mat.name}</div>
                     <div class="bar-track-wrapper">
                         <div class="bar-track">
-                            <div class="yield-marker" style="left: ${yieldPercent}%;">
-                                <div class="yield-text">${t.yieldLbl}: ${mat.yield}</div>
-                            </div>
-                            <div class="bar-fill" style="width: ${displayStress}%; background-color: ${barColor};">
-                                ${t.stressLbl}: ${maxStress.toFixed(1)}
-                            </div>
+                            <div class="yield-marker" style="left: ${yieldPercent}%;"><div class="yield-text">${t.yieldLbl}: ${mat.yield}</div></div>
+                            <div class="bar-fill" style="width: ${stressPercent}%; background-color: ${isSafe ? '#10b981' : '#ef4444'};">${t.stressLbl}: ${maxStress.toFixed(1)}</div>
                         </div>
                     </div>
-                </div>
-            `;
+                </div>`;
+
+            radarData.push({ name: mat.name, values: [mat.density, mat.yield, mat.eMod, mat.cost, mat.alpha] });
         });
 
         document.getElementById('cardsContainer').innerHTML = cardsHtml;
         document.getElementById('chartBars').innerHTML = chartHtml;
         document.getElementById('resultsArea').style.display = 'block';
         resultsCalculated = true;
+
+        drawRadarChart(radarData);
+        drawDeformationAnimation(deflection, beamType, length);
+    }
+
+    function drawRadarChart(data) {
+        const canvas = document.getElementById('radarCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width, height = canvas.height;
+        const centerX = width/2, centerY = height/2;
+        const radius = Math.min(width, height) * 0.35;
+        const axes = 5;
+        const angleStep = (Math.PI * 2) / axes;
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, width, height);
+
+        // Radar ızgarası
+        for (let level = 1; level <= 5; level++) {
+            ctx.beginPath();
+            for (let i = 0; i <= axes; i++) {
+                const angle = i * angleStep - Math.PI/2;
+                const r = (radius * level) / 5;
+                const x = centerX + r * Math.cos(angle);
+                const y = centerY + r * Math.sin(angle);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.strokeStyle = '#334155';
+            ctx.stroke();
+        }
+
+        // Eksen çizgileri
+        for (let i = 0; i < axes; i++) {
+            const angle = i * angleStep - Math.PI/2;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX + radius * Math.cos(angle), centerY + radius * Math.sin(angle));
+            ctx.strokeStyle = '#334155';
+            ctx.stroke();
+        }
+
+        // Veri çizimleri
+        const colors = ['#38bdf8', '#10b981', '#ef4444'];
+        const maxValues = [10, 1500, 200, 200, 200]; // Normalizasyon için yaklaşık max değerler
+        data.forEach((material, idx) => {
+            ctx.beginPath();
+            material.values.forEach((val, i) => {
+                const normVal = Math.min(val / maxValues[i], 1);
+                const angle = i * angleStep - Math.PI/2;
+                const x = centerX + radius * normVal * Math.cos(angle);
+                const y = centerY + radius * normVal * Math.sin(angle);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.closePath();
+            ctx.strokeStyle = colors[idx % colors.length];
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.fillStyle = colors[idx % colors.length] + '33';
+            ctx.fill();
+        });
+
+        // Etiketler
+        const labels = ['Yoğunluk', 'Akma', 'E.Modül', 'Fiyat', 'Alfa'];
+        for (let i = 0; i < axes; i++) {
+            const angle = i * angleStep - Math.PI/2;
+            const x = centerX + (radius + 20) * Math.cos(angle);
+            const y = centerY + (radius + 20) * Math.sin(angle);
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(labels[i], x, y);
+        }
+
+        // Legend
+        ctx.font = '12px Arial';
+        data.forEach((material, idx) => {
+            const y = 30 + idx * 20;
+            ctx.fillStyle = colors[idx % colors.length];
+            ctx.fillRect(10, y-10, 15, 15);
+            ctx.fillStyle = '#f8fafc';
+            ctx.textAlign = 'left';
+            ctx.fillText(material.name, 30, y+2);
+        });
+    }
+
+    function drawDeformationAnimation(maxDeflection, beamType, length) {
+        const svg = document.getElementById('deformSVG');
+        const t = dict[currentLang];
+        const isAxial = beamType === 'axial';
+        let pathD = '';
+        const amplitude = Math.min(Math.abs(maxDeflection) * 2, 80); // Görsel büyütme
+        const midX = 300, startX = 50, endX = 550;
+
+        if (isAxial) {
+            // Eksenel durumda uzama/kısalma göster
+            pathD = `M ${startX} 100 L ${endX} 100`;
+        } else if (beamType === 'cant_pt' || beamType === 'cant_udl') {
+            // Konsol: bir uç sabit, diğer uç eğilir
+            pathD = `M ${startX} 100 Q ${(startX+endX)/2} ${100 + amplitude} ${endX} ${100 + amplitude*1.5}`;
+        } else {
+            // Basit mesnet: ortada çökme
+            pathD = `M ${startX} 100 Q ${(startX+endX)/2} ${100 + amplitude} ${endX} 100`;
+        }
+        svg.innerHTML = `
+            <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" />
+                </marker>
+            </defs>
+            <line x1="${startX}" y1="100" x2="${endX}" y2="100" stroke="#475569" stroke-width="2" />
+            <path d="${pathD}" fill="none" stroke="#38bdf8" stroke-width="4" stroke-dasharray="8,4" />
+            <text x="${midX}" y="160" fill="#94a3b8" font-size="14" text-anchor="middle">${t.deflect}: ${maxDeflection.toFixed(2)} mm</text>
+        `;
+    }
+
+    function init() {
+        loadSavedMaterials();
+        populateDropdowns();
+        document.getElementById('currentDate').innerText = new Date().toLocaleDateString();
+        updateLangUI();
+        updateDynamicSVG();
+        // Tooltip metinleri
+        document.getElementById('tipBeamType').textContent = dict[currentLang].tipBeamType;
+        document.getElementById('tipForce').textContent = dict[currentLang].tipForce;
+        document.getElementById('tipLength').textContent = dict[currentLang].tipLength;
+        document.getElementById('tipProfile').textContent = dict[currentLang].tipProfile;
     }
 
     window.onload = init;
