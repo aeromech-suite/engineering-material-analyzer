@@ -29,7 +29,7 @@
             --radar-bg: #ffffff;
             --svg-bg: #f8fafc; --svg-border: #cbd5e1;
         }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; transition: background 0.3s, color 0.3s;}
         .container { max-width: 1150px; width: 100%; background: var(--panel); padding: 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
         
         .header-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--section-border); padding-bottom: 15px; margin-bottom: 20px; }
@@ -91,7 +91,7 @@
         .result-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
         .card { background: var(--card-bg); padding: 22px; border-radius: 10px; border-top: 5px solid var(--card-border); position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .card h4 { margin: 0 0 18px 0; font-size: 17px; color: var(--text); border-bottom: 1px solid var(--card-border); padding-bottom: 12px; display: flex; justify-content: space-between; align-items: center;}
-        .cost-badge { font-size: 13px; color: var(--bg); background: var(--cost); padding: 4px 8px; border-radius: 5px; font-weight: bold;}
+        .cost-badge { font-size: 13px; color: #ffffff; background: var(--cost); padding: 4px 8px; border-radius: 5px; font-weight: bold;}
         .data-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px; }
         .data-row span:last-child { font-family: monospace; font-size: 14px; color: var(--text); }
         
@@ -288,12 +288,12 @@
                         </svg>
                         <svg id="svg_solid" class="geo-inputs" viewBox="0 0 100 100" width="100%" height="100%">
                             <circle id="solid_circle" cx="50" cy="50" r="35" fill="#38bdf8" opacity="0.3" stroke="#38bdf8" stroke-width="3" />
-                            <text id="solid_label_d" x="45" y="45" fill="var(--text)" font-size="14">d</text>
+                            <text x="45" y="45" fill="var(--text)" font-size="14">d</text>
                         </svg>
                         <svg id="svg_hollow" class="geo-inputs" viewBox="0 0 100 100" width="100%" height="100%">
                             <circle id="hollow_outer" cx="50" cy="50" r="40" fill="none" stroke="#38bdf8" stroke-width="2" />
                             <circle id="hollow_inner" cx="50" cy="50" r="25" fill="none" stroke="#38bdf8" stroke-width="2" />
-                            <text id="hollow_label_D" x="45" y="45" fill="var(--text)" font-size="14">D</text>
+                            <text x="45" y="45" fill="var(--text)" font-size="14">D</text>
                             <path d="M 75 50 L 90 50" stroke="#ef4444" stroke-width="3" /><text x="78" y="43" fill="#ef4444" font-size="14" font-weight="bold">t</text>
                         </svg>
                     </div>
@@ -596,28 +596,47 @@
     function populateDropdowns() {
         const selects = ['mat1', 'mat2', 'mat3'];
         const vals = selects.map(id => document.getElementById(id).value);
+        
+        // Arama sorgusunu al
+        const searchInput = document.getElementById('matSearch');
+        const query = searchInput ? searchInput.value.toLowerCase() : "";
+
         let opts = "";
         for (let catKey in categoryNames) {
             let catGroupHtml = `<optgroup label="${categoryNames[catKey][currentLang]}">`;
             let hasItems = false;
             for (let matKey in materials) {
                 if ((catKey === 'custom' && matKey.startsWith('custom_')) || (materials[matKey].category === catKey)) {
-                    catGroupHtml += `<option value="${matKey}">${materials[matKey].name}</option>`;
-                    hasItems = true;
+                    // Arama motoru mantığı burada devreye giriyor
+                    if (materials[matKey].name.toLowerCase().includes(query)) {
+                        catGroupHtml += `<option value="${matKey}">${materials[matKey].name}</option>`;
+                        hasItems = true;
+                    }
                 }
             }
             catGroupHtml += `</optgroup>`;
             if (hasItems) opts += catGroupHtml;
         }
+
         selects.forEach((id, i) => {
             document.getElementById(id).innerHTML = opts;
-            if (vals[i] && materials[vals[i]]) document.getElementById(id).value = vals[i];
+            
+            // Eğer önceki seçili değer hala filtrelenen listede varsa, onu tekrar seçili yap
+            if (vals[i] && document.querySelector(`#${id} option[value="${vals[i]}"]`)) {
+                document.getElementById(id).value = vals[i];
+            }
         });
-        if (!vals[0] || !vals[1] || !vals[2]) {
+
+        // Eğer kullanıcı arama yapmıyorsa ve hiçbir şey seçili değilse varsayılanları ata
+        if (query === "" && (!vals[0] || !vals[1] || !vals[2])) {
             if (!vals[0]) document.getElementById('mat1').value = "alu7075";
             if (!vals[1]) document.getElementById('mat2').value = "steel4140";
             if (!vals[2]) document.getElementById('mat3').value = "pa612_cf15";
         }
+    }
+
+    function filterMaterials() {
+        populateDropdowns();
     }
 
     function addCustomMaterial() {
@@ -674,7 +693,7 @@
             const d = parseFloat(document.getElementById('solid_d').value) || 25;
             const r = Math.min(40, d/2 * 2);
             document.getElementById('solid_circle').setAttribute('r', r);
-            document.getElementById('solid_label_d').textContent = `d=${d}`;
+            document.querySelector('#svg_solid text').textContent = `d=${d}`;
         } else if (profile === 'hollow') {
             const D = parseFloat(document.getElementById('hollow_d').value) || 30;
             const t = parseFloat(document.getElementById('hollow_t').value) || 3;
@@ -682,31 +701,7 @@
             const innerR = Math.max(5, outerR - t * 2);
             document.getElementById('hollow_outer').setAttribute('r', outerR);
             document.getElementById('hollow_inner').setAttribute('r', innerR);
-            document.getElementById('hollow_label_D').textContent = `D=${D}`;
         }
-    }
-
-    function filterMaterials() {
-        const query = document.getElementById('matSearch').value.toLowerCase().trim();
-        const selects = ['mat1', 'mat2', 'mat3'];
-        selects.forEach(id => {
-            const select = document.getElementById(id);
-            const optgroups = select.querySelectorAll('optgroup');
-            optgroups.forEach(group => {
-                const options = group.querySelectorAll('option');
-                let groupHasVisible = false;
-                options.forEach(opt => {
-                    const text = opt.textContent.toLowerCase();
-                    if (query === '' || text.includes(query)) {
-                        opt.hidden = false;
-                        groupHasVisible = true;
-                    } else {
-                        opt.hidden = true;
-                    }
-                });
-                group.hidden = !groupHasVisible;
-            });
-        });
     }
 
     function showMaterialInfo(selectId) {
