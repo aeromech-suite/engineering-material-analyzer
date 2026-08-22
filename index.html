@@ -17,7 +17,7 @@
             --radar-bg: #0f172a;
             --svg-bg: #1e293b; --svg-border: #475569;
         }
-        .light-theme {
+        body.light-theme {
             --bg: #f1f5f9; --panel: #ffffff; --primary: #0284c7; --warning: #d97706;
             --success: #059669; --danger: #dc2626; --text: #0f172a; --muted: #64748b;
             --cost: #10b981; --deflect: #f59e0b;
@@ -283,17 +283,17 @@
                     <div class="diagram-box">
                         <svg id="svg_rect" class="geo-inputs active" viewBox="0 0 100 100" width="100%" height="100%">
                             <rect id="rect_shape" x="25" y="15" width="50" height="70" fill="none" stroke="#38bdf8" stroke-width="3" />
-                            <text id="rect_label_b" x="45" y="99" fill="var(--muted)" font-size="12">b</text>
-                            <text id="rect_label_h" x="2" y="55" fill="var(--muted)" font-size="12">h</text>
+                            <text id="rect_label_b" x="45" y="99" style="fill: var(--muted);" font-size="12">b</text>
+                            <text id="rect_label_h" x="2" y="55" style="fill: var(--muted);" font-size="12">h</text>
                         </svg>
                         <svg id="svg_solid" class="geo-inputs" viewBox="0 0 100 100" width="100%" height="100%">
                             <circle id="solid_circle" cx="50" cy="50" r="35" fill="#38bdf8" opacity="0.3" stroke="#38bdf8" stroke-width="3" />
-                            <text x="45" y="45" fill="var(--text)" font-size="14">d</text>
+                            <text x="45" y="45" style="fill: var(--text);" font-size="14">d</text>
                         </svg>
                         <svg id="svg_hollow" class="geo-inputs" viewBox="0 0 100 100" width="100%" height="100%">
                             <circle id="hollow_outer" cx="50" cy="50" r="40" fill="none" stroke="#38bdf8" stroke-width="2" />
                             <circle id="hollow_inner" cx="50" cy="50" r="25" fill="none" stroke="#38bdf8" stroke-width="2" />
-                            <text x="45" y="45" fill="var(--text)" font-size="14">D</text>
+                            <text x="45" y="45" style="fill: var(--text);" font-size="14">D</text>
                             <path d="M 75 50 L 90 50" stroke="#ef4444" stroke-width="3" /><text x="78" y="43" fill="#ef4444" font-size="14" font-weight="bold">t</text>
                         </svg>
                     </div>
@@ -459,7 +459,9 @@
             tipBeamType: "Select how the load is applied to the structure.", tipForce: "Total applied force in Newtons (N).", tipLength: "Length of the beam or member in millimeters (mm).", tipProfile: "Choose the cross-section shape of the beam.",
             unitSI: "SI (mm, MPa)", unitImperial: "Imperial (in, psi)",
             burkling: "Buckling Load", frequency: "Natural Frequency", vonMises: "Von Mises Stress", fatigueLbl: "Fatigue Safety Factor",
-            expertModeOn: "🔧 Expert Mode (Close)", expertModeOff: "🔧 Expert Mode (Edit Defaults)"
+            expertModeOn: "🔧 Expert Mode (Close)", expertModeOff: "🔧 Expert Mode (Edit Defaults)",
+            themeLight: "☀️ Light Theme", themeDark: "🌙 Dark Theme",
+            radarLabels: ['Density', 'Yield', 'E.Mod', 'Cost', 'Alpha']
         },
         tr: {
             title: "🚀 Global Engineering Material Analyzer Pro",
@@ -487,7 +489,9 @@
             tipBeamType: "Yükün yapıya nasıl uygulandığını seçin.", tipForce: "Toplam uygulanan kuvvet (Newton).", tipLength: "Kiriş veya parça uzunluğu (mm).", tipProfile: "Kirişin kesit şeklini seçin.",
             unitSI: "SI (mm, MPa)", unitImperial: "Imperial (in, psi)",
             burkling: "Burkulma Yükü", frequency: "Doğal Frekans", vonMises: "Von Mises Gerilmesi", fatigueLbl: "Yorulma Güvenlik Faktörü",
-            expertModeOn: "🔧 Uzman Modu (Kapat)", expertModeOff: "🔧 Uzman Modu (Varsayılanları Düzenle)"
+            expertModeOn: "🔧 Uzman Modu (Kapat)", expertModeOff: "🔧 Uzman Modu (Varsayılanları Düzenle)",
+            themeLight: "☀️ Açık Tema", themeDark: "🌙 Koyu Tema",
+            radarLabels: ['Yoğunluk', 'Akma', 'E.Modül', 'Fiyat', 'Alfa']
         }
     };
 
@@ -597,7 +601,6 @@
         const selects = ['mat1', 'mat2', 'mat3'];
         const vals = selects.map(id => document.getElementById(id).value);
         
-        // Arama sorgusunu al
         const searchInput = document.getElementById('matSearch');
         const query = searchInput ? searchInput.value.toLowerCase() : "";
 
@@ -607,7 +610,6 @@
             let hasItems = false;
             for (let matKey in materials) {
                 if ((catKey === 'custom' && matKey.startsWith('custom_')) || (materials[matKey].category === catKey)) {
-                    // Arama motoru mantığı burada devreye giriyor
                     if (materials[matKey].name.toLowerCase().includes(query)) {
                         catGroupHtml += `<option value="${matKey}">${materials[matKey].name}</option>`;
                         hasItems = true;
@@ -620,14 +622,11 @@
 
         selects.forEach((id, i) => {
             document.getElementById(id).innerHTML = opts;
-            
-            // Eğer önceki seçili değer hala filtrelenen listede varsa, onu tekrar seçili yap
             if (vals[i] && document.querySelector(`#${id} option[value="${vals[i]}"]`)) {
                 document.getElementById(id).value = vals[i];
             }
         });
 
-        // Eğer kullanıcı arama yapmıyorsa ve hiçbir şey seçili değilse varsayılanları ata
         if (query === "" && (!vals[0] || !vals[1] || !vals[2])) {
             if (!vals[0]) document.getElementById('mat1').value = "alu7075";
             if (!vals[1]) document.getElementById('mat2').value = "steel4140";
@@ -716,9 +715,9 @@
     }
 
     function toggleTheme() {
-        document.getElementById('mainContainer').classList.toggle('light-theme');
-        const btn = document.getElementById('themeBtn');
-        btn.textContent = document.getElementById('mainContainer').classList.contains('light-theme') ? '🌙 Koyu Tema' : '☀️ Açık Tema';
+        document.body.classList.toggle('light-theme');
+        const isLight = document.body.classList.contains('light-theme');
+        document.getElementById('themeBtn').textContent = isLight ? dict[currentLang].themeDark : dict[currentLang].themeLight;
         if (resultsCalculated) {
             drawRadarChart(radarDataCache);
             drawDeformationAnimation(lastDeflection, lastBeamType, lastLength);
@@ -740,6 +739,8 @@
 
     function updateLangUI() {
         const t = dict[currentLang];
+        const isLight = document.body.classList.contains('light-theme');
+        
         document.getElementById('appTitle').innerText = t.title;
         document.getElementById('btn-analysis').innerText = t.tabAna;
         document.getElementById('btn-materials').innerText = t.tabMat;
@@ -788,6 +789,10 @@
         document.getElementById('radarTitle').innerText = t.radarTitle;
         document.getElementById('deformTitle').innerText = t.deformTitle;
         document.getElementById('btnExpert').textContent = expertMode ? t.expertModeOn : t.expertModeOff;
+        
+        // Tema butonunu duruma göre güncelle
+        document.getElementById('themeBtn').textContent = isLight ? t.themeDark : t.themeLight;
+        
         populateDropdowns();
         renderCustomList();
         renderExpertList();
@@ -951,11 +956,10 @@
             const frequency = (1 / (2 * Math.PI)) * Math.sqrt((eModulus * 1000 * I) / (mat.density * A * Math.pow(length, 3)));
             const fatigueFactor = (mat.fatigue || 0) > 0 ? (mat.fatigue / maxStress) : Infinity;
 
-            // Birim dönüşümleri
-            const stressUnit = currentUnitSystem === 'Imperial' ? 145.038 : 1; // MPa -> psi
-            const forceUnit = currentUnitSystem === 'Imperial' ? 0.224809 : 1; // N -> lbf
-            const displayWeight = currentUnitSystem === 'Imperial' ? weight * 0.00220462 : weight; // g -> lb
-            const displayDeflection = currentUnitSystem === 'Imperial' ? deflection / 25.4 : deflection; // mm -> in
+            const stressUnit = currentUnitSystem === 'Imperial' ? 145.038 : 1; 
+            const forceUnit = currentUnitSystem === 'Imperial' ? 0.224809 : 1; 
+            const displayWeight = currentUnitSystem === 'Imperial' ? weight * 0.00220462 : weight; 
+            const displayDeflection = currentUnitSystem === 'Imperial' ? deflection / 25.4 : deflection; 
             const displayStress = maxStress * stressUnit;
             const displayYield = mat.yield * stressUnit;
             const displayCost = totalCost;
@@ -1018,7 +1022,7 @@
         const angleStep = (Math.PI * 2) / axes;
 
         ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--radar-bg').trim() || '#0f172a';
+        ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--radar-bg').trim() || '#0f172a';
         ctx.fillRect(0, 0, width, height);
 
         for (let level = 1; level <= 5; level++) {
@@ -1031,7 +1035,7 @@
                 if (i === 0) ctx.moveTo(x, y);
                 else ctx.lineTo(x, y);
             }
-            ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--section-border').trim() || '#334155';
+            ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--section-border').trim() || '#334155';
             ctx.stroke();
         }
 
@@ -1040,7 +1044,7 @@
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
             ctx.lineTo(centerX + radius * Math.cos(angle), centerY + radius * Math.sin(angle));
-            ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--section-border').trim() || '#334155';
+            ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--section-border').trim() || '#334155';
             ctx.stroke();
         }
 
@@ -1064,12 +1068,13 @@
             ctx.fill();
         });
 
-        const labels = ['Yoğunluk', 'Akma', 'E.Modül', 'Fiyat', 'Alfa'];
+        // Çevrilmiş radar etiketlerini sözlükten çekiyoruz
+        const labels = dict[currentLang].radarLabels;
         for (let i = 0; i < axes; i++) {
             const angle = i * angleStep - Math.PI/2;
             const x = centerX + (radius + 20) * Math.cos(angle);
             const y = centerY + (radius + 20) * Math.sin(angle);
-            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#f8fafc';
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text').trim() || '#f8fafc';
             ctx.font = '12px Arial';
             ctx.textAlign = 'center';
             ctx.fillText(labels[i], x, y);
@@ -1080,7 +1085,7 @@
             const y = 30 + idx * 20;
             ctx.fillStyle = colors[idx % colors.length];
             ctx.fillRect(10, y-10, 15, 15);
-            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#f8fafc';
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text').trim() || '#f8fafc';
             ctx.textAlign = 'left';
             ctx.fillText(material.name, 30, y+2);
         });
@@ -1102,7 +1107,7 @@
             pathD = `M ${startX} 100 Q ${(startX+endX)/2} ${100 + amplitude} ${endX} 100`;
         }
 
-        const svgBg = getComputedStyle(document.documentElement).getPropertyValue('--radar-bg').trim() || '#0f172a';
+        const svgBg = getComputedStyle(document.body).getPropertyValue('--radar-bg').trim() || '#0f172a';
         svg.setAttribute('style', `background: ${svgBg}; border-radius: 8px;`);
         const displayDeflection = currentUnitSystem === 'Imperial' ? maxDeflection / 25.4 : maxDeflection;
         const unit = currentUnitSystem === 'Imperial' ? 'in' : 'mm';
@@ -1114,7 +1119,7 @@
             </defs>
             <line x1="${startX}" y1="100" x2="${endX}" y2="100" stroke="#94a3b8" stroke-width="2" />
             <path d="${pathD}" fill="none" stroke="#38bdf8" stroke-width="4" stroke-dasharray="8,4" />
-            <text x="${midX}" y="160" fill="${getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#f8fafc'}" font-size="14" text-anchor="middle">${t.deflect}: ${displayDeflection.toFixed(3)} ${unit}</text>
+            <text x="${midX}" y="160" fill="${getComputedStyle(document.body).getPropertyValue('--text').trim() || '#f8fafc'}" font-size="14" text-anchor="middle">${t.deflect}: ${displayDeflection.toFixed(3)} ${unit}</text>
         `;
     }
 
