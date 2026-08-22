@@ -283,17 +283,17 @@
                     <div class="diagram-box">
                         <svg id="svg_rect" class="geo-inputs active" viewBox="0 0 100 100" width="100%" height="100%">
                             <rect id="rect_shape" x="25" y="15" width="50" height="70" fill="none" stroke="#38bdf8" stroke-width="3" />
-                            <text id="rect_label_b" x="45" y="99" fill="#94a3b8" font-size="12">b</text>
-                            <text id="rect_label_h" x="2" y="55" fill="#94a3b8" font-size="12">h</text>
+                            <text id="rect_label_b" x="45" y="99" fill="var(--muted)" font-size="12">b</text>
+                            <text id="rect_label_h" x="2" y="55" fill="var(--muted)" font-size="12">h</text>
                         </svg>
                         <svg id="svg_solid" class="geo-inputs" viewBox="0 0 100 100" width="100%" height="100%">
                             <circle id="solid_circle" cx="50" cy="50" r="35" fill="#38bdf8" opacity="0.3" stroke="#38bdf8" stroke-width="3" />
-                            <text x="45" y="45" fill="#f8fafc" font-size="14">d</text>
+                            <text id="solid_label_d" x="45" y="45" fill="var(--text)" font-size="14">d</text>
                         </svg>
                         <svg id="svg_hollow" class="geo-inputs" viewBox="0 0 100 100" width="100%" height="100%">
                             <circle id="hollow_outer" cx="50" cy="50" r="40" fill="none" stroke="#38bdf8" stroke-width="2" />
                             <circle id="hollow_inner" cx="50" cy="50" r="25" fill="none" stroke="#38bdf8" stroke-width="2" />
-                            <text x="45" y="45" fill="#f8fafc" font-size="14">D</text>
+                            <text id="hollow_label_D" x="45" y="45" fill="var(--text)" font-size="14">D</text>
                             <path d="M 75 50 L 90 50" stroke="#ef4444" stroke-width="3" /><text x="78" y="43" fill="#ef4444" font-size="14" font-weight="bold">t</text>
                         </svg>
                     </div>
@@ -674,7 +674,7 @@
             const d = parseFloat(document.getElementById('solid_d').value) || 25;
             const r = Math.min(40, d/2 * 2);
             document.getElementById('solid_circle').setAttribute('r', r);
-            document.querySelector('#svg_solid text').textContent = `d=${d}`;
+            document.getElementById('solid_label_d').textContent = `d=${d}`;
         } else if (profile === 'hollow') {
             const D = parseFloat(document.getElementById('hollow_d').value) || 30;
             const t = parseFloat(document.getElementById('hollow_t').value) || 3;
@@ -682,18 +682,29 @@
             const innerR = Math.max(5, outerR - t * 2);
             document.getElementById('hollow_outer').setAttribute('r', outerR);
             document.getElementById('hollow_inner').setAttribute('r', innerR);
+            document.getElementById('hollow_label_D').textContent = `D=${D}`;
         }
     }
 
     function filterMaterials() {
-        const query = document.getElementById('matSearch').value.toLowerCase();
+        const query = document.getElementById('matSearch').value.toLowerCase().trim();
         const selects = ['mat1', 'mat2', 'mat3'];
         selects.forEach(id => {
             const select = document.getElementById(id);
-            const options = select.querySelectorAll('option');
-            options.forEach(opt => {
-                const text = opt.textContent.toLowerCase();
-                opt.style.display = text.includes(query) ? '' : 'none';
+            const optgroups = select.querySelectorAll('optgroup');
+            optgroups.forEach(group => {
+                const options = group.querySelectorAll('option');
+                let groupHasVisible = false;
+                options.forEach(opt => {
+                    const text = opt.textContent.toLowerCase();
+                    if (query === '' || text.includes(query)) {
+                        opt.hidden = false;
+                        groupHasVisible = true;
+                    } else {
+                        opt.hidden = true;
+                    }
+                });
+                group.hidden = !groupHasVisible;
             });
         });
     }
