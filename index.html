@@ -790,7 +790,6 @@
         document.getElementById('deformTitle').innerText = t.deformTitle;
         document.getElementById('btnExpert').textContent = expertMode ? t.expertModeOn : t.expertModeOff;
         
-        // Tema butonunu duruma göre güncelle
         document.getElementById('themeBtn').textContent = isLight ? t.themeDark : t.themeLight;
         
         populateDropdowns();
@@ -869,32 +868,47 @@
         if (!valid) return;
 
         let A = 0, I = 0, Z = 0;
-        let dimensionsText = "";
+        let b=0, h=0, d=0, D=0, th=0;
         let profileName = "";
 
         if (profile === 'rect') {
-            const b = parseFloat(document.getElementById('rect_b').value);
-            const h = parseFloat(document.getElementById('rect_h').value);
+            b = parseFloat(document.getElementById('rect_b').value);
+            h = parseFloat(document.getElementById('rect_h').value);
             if (!b || !h || b <= 0 || h <= 0) return alert(t.errFill);
             A = b * h; I = (b * Math.pow(h, 3)) / 12; Z = I / (h / 2);
-            dimensionsText = `b: ${b}mm, h: ${h}mm`; profileName = t.optRect;
+            profileName = t.optRect;
         } else if (profile === 'solid') {
-            const d = parseFloat(document.getElementById('solid_d').value);
+            d = parseFloat(document.getElementById('solid_d').value);
             if (!d || d <= 0) return alert(t.errFill);
             A = (Math.PI * Math.pow(d, 2)) / 4; I = (Math.PI * Math.pow(d, 4)) / 64; Z = (Math.PI * Math.pow(d, 3)) / 32;
-            dimensionsText = `d: ${d}mm`; profileName = t.optSolid;
+            profileName = t.optSolid;
         } else if (profile === 'hollow') {
-            const D = parseFloat(document.getElementById('hollow_d').value);
-            const th = parseFloat(document.getElementById('hollow_t').value);
+            D = parseFloat(document.getElementById('hollow_d').value);
+            th = parseFloat(document.getElementById('hollow_t').value);
             if (!D || !th || th >= D/2 || D <= 0 || th <= 0) return alert(t.errFill + " (Thick < D/2)");
             const d_in = D - (2 * th);
             A = (Math.PI / 4) * (Math.pow(D, 2) - Math.pow(d_in, 2)); I = (Math.PI / 64) * (Math.pow(D, 4) - Math.pow(d_in, 4)); Z = I / (D / 2);
-            dimensionsText = `D: ${D}mm, t: ${th}mm`; profileName = t.optHollow;
+            profileName = t.optHollow;
         }
 
-        const volume = (A * length) / 1000; // cm³
+        const isImp = currentUnitSystem === 'Imperial';
+        const lConv = isImp ? 1/25.4 : 1;
+        const lSym = isImp ? 'in' : 'mm';
+        const fConv = isImp ? 0.224809 : 1;
+        const fSym = isImp ? 'lbf' : 'N';
+        
+        let dimensionsText = "";
+        if (profile === 'rect') dimensionsText = `b: ${(b*lConv).toFixed(isImp?2:1)}${lSym}, h: ${(h*lConv).toFixed(isImp?2:1)}${lSym}`;
+        else if (profile === 'solid') dimensionsText = `d: ${(d*lConv).toFixed(isImp?2:1)}${lSym}`;
+        else if (profile === 'hollow') dimensionsText = `D: ${(D*lConv).toFixed(isImp?2:1)}${lSym}, t: ${(th*lConv).toFixed(isImp?2:1)}${lSym}`;
+        
+        let dA = isImp ? A / Math.pow(25.4, 2) : A;
+        let dI = isImp ? I / Math.pow(25.4, 4) : I;
+        let dZ = isImp ? Z / Math.pow(25.4, 3) : Z;
+        
+        document.getElementById('geoSummaryDiv').innerHTML = `${t.geoTitle} <br> ${t.areaLbl}: <span>${dA.toFixed(1)} ${isImp?'in²':'mm²'}</span> | ${t.inertiaLbl}: <span>${dI.toFixed(1)} ${isImp?'in⁴':'mm⁴'}</span> | ${t.modulusLbl}: <span>${dZ.toFixed(1)} ${isImp?'in³':'mm³'}</span>`;
 
-        document.getElementById('geoSummaryDiv').innerHTML = `${t.geoTitle} <br> ${t.areaLbl}: <span>${A.toFixed(1)} mm²</span> | ${t.inertiaLbl}: <span>${I.toFixed(1)} mm⁴</span> | ${t.modulusLbl}: <span>${Z.toFixed(1)} mm³</span>`;
+        const volume = (A * length) / 1000; // cm³
 
         const optionMap = { "axial": "optAxial", "cant_pt": "optCantPt", "cant_udl": "optCantUdl", "supp_pt": "optSuppPt", "supp_udl": "optSuppUdl" };
         const beamName = document.getElementById(optionMap[beamType] || "optSuppPt").textContent;
@@ -905,7 +919,7 @@
                 <tr><th>${t.sumBeam}</th><th>${t.forceCol}</th><th>${t.lengthCol}</th><th>${t.sumProf}</th><th>${t.sumDim}</th></tr>
             </thead>
             <tbody>
-                <tr><td><b>${beamName}</b></td><td><b>${force} N</b></td><td><b>${length} mm</b></td><td>${profileName}</td><td>${dimensionsText}</td></tr>
+                <tr><td><b>${beamName}</b></td><td><b>${(force*fConv).toFixed(1)} ${fSym}</b></td><td><b>${(length*lConv).toFixed(1)} ${lSym}</b></td><td>${profileName}</td><td>${dimensionsText}</td></tr>
             </tbody>`;
 
         let maxMoment = 0;
@@ -956,29 +970,28 @@
             const frequency = (1 / (2 * Math.PI)) * Math.sqrt((eModulus * 1000 * I) / (mat.density * A * Math.pow(length, 3)));
             const fatigueFactor = (mat.fatigue || 0) > 0 ? (mat.fatigue / maxStress) : Infinity;
 
-            const stressUnit = currentUnitSystem === 'Imperial' ? 145.038 : 1; 
-            const forceUnit = currentUnitSystem === 'Imperial' ? 0.224809 : 1; 
-            const displayWeight = currentUnitSystem === 'Imperial' ? weight * 0.00220462 : weight; 
-            const displayDeflection = currentUnitSystem === 'Imperial' ? deflection / 25.4 : deflection; 
+            const stressUnit = isImp ? 145.038 : 1; 
+            const displayWeight = isImp ? weight * 0.00220462 : weight; 
+            const displayDeflection = isImp ? deflection / 25.4 : deflection; 
+            const displayExpansion = isImp ? expansion / 25.4 : expansion; 
             const displayStress = maxStress * stressUnit;
             const displayYield = mat.yield * stressUnit;
-            const displayCost = totalCost;
 
             cardsHtml += `
                 <div class="card" style="border-color: ${isSafe ? '#10b981' : '#ef4444'}">
-                    <h4>${mat.name} <span class="cost-badge">$${displayCost.toFixed(2)}</span></h4>
-                    <div class="data-row"><span>${t.weight}:</span> <span>${displayWeight.toFixed(3)} ${currentUnitSystem === 'Imperial' ? 'lb' : 'g'}</span></div>
-                    <div class="data-row"><span>${t.expansion}:</span> <span style="color:#38bdf8">${expansion.toFixed(3)} ${currentUnitSystem === 'Imperial' ? 'in' : 'mm'}</span></div>
-                    <div class="data-row"><span>${t.deflect}:</span> <span style="color:var(--deflect); font-weight:bold;">${displayDeflection.toFixed(4)} ${currentUnitSystem === 'Imperial' ? 'in' : 'mm'}</span></div>
+                    <h4>${mat.name} <span class="cost-badge">$${totalCost.toFixed(2)}</span></h4>
+                    <div class="data-row"><span>${t.weight}:</span> <span>${displayWeight.toFixed(3)} ${isImp ? 'lb' : 'g'}</span></div>
+                    <div class="data-row"><span>${t.expansion}:</span> <span style="color:#38bdf8">${displayExpansion.toFixed(4)} ${isImp ? 'in' : 'mm'}</span></div>
+                    <div class="data-row"><span>${t.deflect}:</span> <span style="color:var(--deflect); font-weight:bold;">${displayDeflection.toFixed(4)} ${isImp ? 'in' : 'mm'}</span></div>
                     <div class="stress-box">
-                        <div class="stress-row"><span>${t.stressAxial}:</span> <span>${(axialStress * stressUnit).toFixed(1)} ${currentUnitSystem === 'Imperial' ? 'psi' : 'MPa'}</span></div>
-                        <div class="stress-row"><span>${t.stressBend}:</span> <span>${(bendingStress * stressUnit).toFixed(1)} ${currentUnitSystem === 'Imperial' ? 'psi' : 'MPa'}</span></div>
-                        <div class="stress-row"><span>${t.stressShear}:</span> <span>${(shearStress * stressUnit).toFixed(1)} ${currentUnitSystem === 'Imperial' ? 'psi' : 'MPa'}</span></div>
-                        <div class="stress-row"><span>${t.vonMises}:</span> <span>${(vonMises * stressUnit).toFixed(1)} ${currentUnitSystem === 'Imperial' ? 'psi' : 'MPa'}</span></div>
+                        <div class="stress-row"><span>${t.stressAxial}:</span> <span>${(axialStress * stressUnit).toFixed(1)} ${isImp ? 'psi' : 'MPa'}</span></div>
+                        <div class="stress-row"><span>${t.stressBend}:</span> <span>${(bendingStress * stressUnit).toFixed(1)} ${isImp ? 'psi' : 'MPa'}</span></div>
+                        <div class="stress-row"><span>${t.stressShear}:</span> <span>${(shearStress * stressUnit).toFixed(1)} ${isImp ? 'psi' : 'MPa'}</span></div>
+                        <div class="stress-row"><span>${t.vonMises}:</span> <span>${(vonMises * stressUnit).toFixed(1)} ${isImp ? 'psi' : 'MPa'}</span></div>
                     </div>
-                    <div class="highlight-row"><span>${t.stressMax}:</span> <span>${displayStress.toFixed(1)} ${currentUnitSystem === 'Imperial' ? 'psi' : 'MPa'}</span></div>
+                    <div class="highlight-row"><span>${t.stressMax}:</span> <span>${displayStress.toFixed(1)} ${isImp ? 'psi' : 'MPa'}</span></div>
                     <div class="data-row" style="margin-top:10px;"><span>${t.factor}:</span> <span>${factor.toFixed(2)}</span></div>
-                    ${bucklingLoad !== Infinity ? `<div class="data-row"><span>${t.burkling}:</span> <span>${(bucklingLoad * forceUnit).toFixed(1)} ${currentUnitSystem === 'Imperial' ? 'lbf' : 'N'}</span></div>` : ''}
+                    ${bucklingLoad !== Infinity ? `<div class="data-row"><span>${t.burkling}:</span> <span>${(bucklingLoad * fConv).toFixed(1)} ${fSym}</span></div>` : ''}
                     <div class="data-row"><span>${t.frequency}:</span> <span>${frequency.toFixed(2)} Hz</span></div>
                     <div class="data-row"><span>${t.fatigueLbl}:</span> <span>${fatigueFactor === Infinity ? '∞' : fatigueFactor.toFixed(2)}</span></div>
                     <div class="status ${isSafe ? 'safe' : 'fail'}">${isSafe ? t.safe : t.fail}</div>
@@ -1068,7 +1081,6 @@
             ctx.fill();
         });
 
-        // Çevrilmiş radar etiketlerini sözlükten çekiyoruz
         const labels = dict[currentLang].radarLabels;
         for (let i = 0; i < axes; i++) {
             const angle = i * angleStep - Math.PI/2;
@@ -1109,8 +1121,9 @@
 
         const svgBg = getComputedStyle(document.body).getPropertyValue('--radar-bg').trim() || '#0f172a';
         svg.setAttribute('style', `background: ${svgBg}; border-radius: 8px;`);
-        const displayDeflection = currentUnitSystem === 'Imperial' ? maxDeflection / 25.4 : maxDeflection;
-        const unit = currentUnitSystem === 'Imperial' ? 'in' : 'mm';
+        const isImp = currentUnitSystem === 'Imperial';
+        const displayDeflection = isImp ? maxDeflection / 25.4 : maxDeflection;
+        const unit = isImp ? 'in' : 'mm';
         svg.innerHTML = `
             <defs>
                 <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1119,7 +1132,7 @@
             </defs>
             <line x1="${startX}" y1="100" x2="${endX}" y2="100" stroke="#94a3b8" stroke-width="2" />
             <path d="${pathD}" fill="none" stroke="#38bdf8" stroke-width="4" stroke-dasharray="8,4" />
-            <text x="${midX}" y="160" fill="${getComputedStyle(document.body).getPropertyValue('--text').trim() || '#f8fafc'}" font-size="14" text-anchor="middle">${t.deflect}: ${displayDeflection.toFixed(3)} ${unit}</text>
+            <text x="${midX}" y="160" fill="${getComputedStyle(document.body).getPropertyValue('--text').trim() || '#f8fafc'}" font-size="14" text-anchor="middle">${t.deflect}: ${displayDeflection.toFixed(4)} ${unit}</text>
         `;
     }
 
