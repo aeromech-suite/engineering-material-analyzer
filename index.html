@@ -458,7 +458,8 @@
             radarTitle: "📡 Material Comparison Radar Chart", deformTitle: "🏗️ Deformation Animation",
             tipBeamType: "Select how the load is applied to the structure.", tipForce: "Total applied force in Newtons (N).", tipLength: "Length of the beam or member in millimeters (mm).", tipProfile: "Choose the cross-section shape of the beam.",
             unitSI: "SI (mm, MPa)", unitImperial: "Imperial (in, psi)",
-            burkling: "Buckling Load", frequency: "Natural Frequency", vonMises: "Von Mises Stress", fatigueLbl: "Fatigue Safety Factor"
+            burkling: "Buckling Load", frequency: "Natural Frequency", vonMises: "Von Mises Stress", fatigueLbl: "Fatigue Safety Factor",
+            expertModeOn: "🔧 Expert Mode (Close)", expertModeOff: "🔧 Expert Mode (Edit Defaults)"
         },
         tr: {
             title: "🚀 Global Engineering Material Analyzer Pro",
@@ -485,7 +486,8 @@
             radarTitle: "📡 Malzeme Karşılaştırma Radar Grafiği", deformTitle: "🏗️ Deformasyon Animasyonu",
             tipBeamType: "Yükün yapıya nasıl uygulandığını seçin.", tipForce: "Toplam uygulanan kuvvet (Newton).", tipLength: "Kiriş veya parça uzunluğu (mm).", tipProfile: "Kirişin kesit şeklini seçin.",
             unitSI: "SI (mm, MPa)", unitImperial: "Imperial (in, psi)",
-            burkling: "Burkulma Yükü", frequency: "Doğal Frekans", vonMises: "Von Mises Gerilmesi", fatigueLbl: "Yorulma Güvenlik Faktörü"
+            burkling: "Burkulma Yükü", frequency: "Doğal Frekans", vonMises: "Von Mises Gerilmesi", fatigueLbl: "Yorulma Güvenlik Faktörü",
+            expertModeOn: "🔧 Uzman Modu (Kapat)", expertModeOff: "🔧 Uzman Modu (Varsayılanları Düzenle)"
         }
     };
 
@@ -566,7 +568,7 @@
 
     function toggleExpertMode() {
         expertMode = !expertMode;
-        document.getElementById('btnExpert').textContent = expertMode ? "🔧 Uzman Modu (Kapat)" : "🔧 Uzman Modu (Varsayılanları Düzenle)";
+        document.getElementById('btnExpert').textContent = expertMode ? dict[currentLang].expertModeOn : dict[currentLang].expertModeOff;
         renderExpertList();
     }
 
@@ -711,7 +713,6 @@
         document.getElementById('mainContainer').classList.toggle('light-theme');
         const btn = document.getElementById('themeBtn');
         btn.textContent = document.getElementById('mainContainer').classList.contains('light-theme') ? '🌙 Koyu Tema' : '☀️ Açık Tema';
-        // Radar grafiği ve deformasyon SVG'sini yeniden çiz (arka plan değişti)
         if (resultsCalculated) {
             drawRadarChart(radarDataCache);
             drawDeformationAnimation(lastDeflection, lastBeamType, lastLength);
@@ -726,7 +727,9 @@
     function toggleLang() {
         currentLang = currentLang === "en" ? "tr" : "en";
         updateLangUI();
-        if (resultsCalculated) calculate();
+        if (resultsCalculated && document.getElementById('tab-analysis').classList.contains('active')) {
+            calculate();
+        }
     }
 
     function updateLangUI() {
@@ -778,7 +781,7 @@
         document.getElementById('printSoftLbl').innerText = t.printSoft;
         document.getElementById('radarTitle').innerText = t.radarTitle;
         document.getElementById('deformTitle').innerText = t.deformTitle;
-        document.getElementById('btnExpert').textContent = expertMode ? "🔧 Uzman Modu (Kapat)" : "🔧 Uzman Modu (Varsayılanları Düzenle)";
+        document.getElementById('btnExpert').textContent = expertMode ? t.expertModeOn : t.expertModeOff;
         populateDropdowns();
         renderCustomList();
         renderExpertList();
@@ -1095,6 +1098,8 @@
 
         const svgBg = getComputedStyle(document.documentElement).getPropertyValue('--radar-bg').trim() || '#0f172a';
         svg.setAttribute('style', `background: ${svgBg}; border-radius: 8px;`);
+        const displayDeflection = currentUnitSystem === 'Imperial' ? maxDeflection / 25.4 : maxDeflection;
+        const unit = currentUnitSystem === 'Imperial' ? 'in' : 'mm';
         svg.innerHTML = `
             <defs>
                 <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1103,7 +1108,7 @@
             </defs>
             <line x1="${startX}" y1="100" x2="${endX}" y2="100" stroke="#94a3b8" stroke-width="2" />
             <path d="${pathD}" fill="none" stroke="#38bdf8" stroke-width="4" stroke-dasharray="8,4" />
-            <text x="${midX}" y="160" fill="${getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#f8fafc'}" font-size="14" text-anchor="middle">${t.deflect}: ${maxDeflection.toFixed(3)} mm</text>
+            <text x="${midX}" y="160" fill="${getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#f8fafc'}" font-size="14" text-anchor="middle">${t.deflect}: ${displayDeflection.toFixed(3)} ${unit}</text>
         `;
     }
 
