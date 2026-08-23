@@ -120,6 +120,7 @@
         .radar-container { margin-top: 30px; text-align: center; }
         .radar-container canvas { max-width: 100%; background: var(--radar-bg); border-radius: 8px; }
         .deform-container { margin-top: 30px; }
+        /* Animasyon Alanı Yüksekliği İçine Efsane (Legend) Sığsın Diye Büyütüldü */
         .deform-container svg { width: 100%; height: auto; background: var(--radar-bg); border-radius: 8px; }
         
         .unit-selector { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 15px; }
@@ -406,7 +407,7 @@
 
         <div class="deform-container">
             <h3 id="deformTitle">🏗️ Deformasyon Animasyonu</h3>
-            <svg id="deformSVG" viewBox="0 0 600 200" width="100%" height="200"></svg>
+            <svg id="deformSVG" viewBox="0 0 600 270" width="100%" height="270"></svg>
         </div>
         
         <button class="calc-btn print-btn" onclick="triggerPrint()" id="printBtn">📄 Kurumsal PDF Raporu Çıkart</button>
@@ -536,6 +537,9 @@
     let expertMode = false;
     let materials = { ...defaultMaterials };
     let resultsCalculated = false;
+    let lastDeflectionData = [];
+    let lastBeamType = 'supp_pt';
+    let radarDataCache = [];
 
     // ========== FONKSİYONLAR ==========
     
@@ -787,14 +791,9 @@
         document.getElementById('themeBtn').textContent = isLight ? dict[currentLang].themeDark : dict[currentLang].themeLight;
         if (resultsCalculated) {
             drawRadarChart(radarDataCache);
-            drawDeformationAnimation(lastDeflection, lastBeamType, lastLength);
+            drawDeformationAnimation(lastDeflectionData, lastBeamType);
         }
     }
-
-    let radarDataCache = [];
-    let lastDeflection = 0;
-    let lastBeamType = 'supp_pt';
-    let lastLength = 250;
 
     function toggleLang() {
         currentLang = currentLang === "en" ? "tr" : "en";
@@ -886,7 +885,6 @@
         const prev = currentUnitSystem;
         currentUnitSystem = system;
         
-        // Kutucuklardaki değerlerin otomatik birim dönüşümü (UX iyileştirmesi)
         const lInputs = ['length', 'rect_solid_b', 'rect_solid_h', 'rect_hollow_b', 'rect_hollow_h', 'rect_hollow_t', 'solid_d', 'hollow_d', 'hollow_t'];
         const fInputs = ['force'];
         const tInputs = ['delta_t'];
@@ -912,7 +910,7 @@
         document.getElementById('unitSI').classList.toggle('active', system === 'SI');
         document.getElementById('unitImperial').classList.toggle('active', system === 'Imperial');
         
-        updateLangUI(); // Başlıkları yeni birim sembolleriyle günceller
+        updateLangUI();
         if (resultsCalculated) calculate();
     }
 
@@ -983,7 +981,6 @@
         }
         if (!valid) return;
 
-        // Matematik motoru arka planda hep SI kullanır
         let force = isImp ? rawForce / 0.224809 : rawForce;
         let length = isImp ? rawLength * 25.4 : rawLength;
         let deltaT = isImp ? rawDeltaT / 1.8 : rawDeltaT;
@@ -1041,7 +1038,7 @@
         
         document.getElementById('geoSummaryDiv').innerHTML = `${t.geoTitle} <br> ${t.areaLbl}: <span>${dA.toFixed(1)} ${isImp?'in²':'mm²'}</span> | ${t.inertiaLbl}: <span>${dI.toFixed(1)} ${isImp?'in⁴':'mm⁴'}</span> | ${t.modulusLbl}: <span>${dZ.toFixed(1)} ${isImp?'in³':'mm³'}</span>`;
 
-        const volume = (A * length) / 1000; // cm³
+        const volume = (A * length) / 1000; 
 
         const optionMap = { "axial": "optAxial", "cant_pt": "optCantPt", "cant_udl": "optCantUdl", "supp_pt": "optSuppPt", "supp_udl": "optSuppUdl" };
         const beamName = document.getElementById(optionMap[beamType] || "optSuppPt").textContent;
@@ -1081,7 +1078,9 @@
         maxGraphValue *= 1.15;
 
         radarDataCache = [];
-        let firstDeflection = 0;
+        lastDeflectionData = []; // YENİ: 3 malzemenin esnemesini animasyon için hafızaya alır
+        const colorsArr = ['#38bdf8', '#10b981', '#ef4444'];
+
         keys.forEach((key, index) => {
             if (!materials[key]) return;
             const mat = materials[key];
@@ -1098,8 +1097,6 @@
             else if (beamType === 'supp_pt') deflection = (force * Math.pow(length, 3)) / (48 * (eModulus * 1000) * I);
             else if (beamType === 'supp_udl') deflection = (5 * force * Math.pow(length, 3)) / (384 * (eModulus * 1000) * I);
 
-            if (index === 0) firstDeflection = deflection;
-
             const totalCost = (weight / 1000) * (mat.cost || 0);
             const frequency = (1 / (2 * Math.PI)) * Math.sqrt((eModulus * 1000 * I) / (mat.density * A * Math.pow(length, 3)));
             const fatigueFactor = (mat.fatigue || 0) > 0 ? (mat.fatigue / maxStress) : Infinity;
@@ -1110,6 +1107,14 @@
             const displayExpansion = isImp ? expansion / 25.4 : expansion; 
             const displayStress = maxStress * stressUnit;
             const displayYield = mat.yield * stressUnit;
+
+            // Animasyon dizisine malzemeyi pushluyoruz
+            lastDeflectionData.push({
+                name: mat.name,
+                val: deflection,
+                displayVal: displayDeflection,
+                color: colorsArr[index % colorsArr.length]
+            });
 
             cardsHtml += `
                 <div class="card" style="border-color: ${isSafe ? '#10b981' : '#ef4444'}">
@@ -1152,11 +1157,9 @@
         document.getElementById('resultsArea').style.display = 'block';
         resultsCalculated = true;
 
-        lastDeflection = firstDeflection;
         lastBeamType = beamType;
-        lastLength = rawLength;
         drawRadarChart(radarDataCache);
-        drawDeformationAnimation(lastDeflection, lastBeamType, lastLength);
+        drawDeformationAnimation(lastDeflectionData, lastBeamType);
     }
 
     function drawRadarChart(data) {
@@ -1237,37 +1240,45 @@
         });
     }
 
-    function drawDeformationAnimation(maxDeflection, beamType, length) {
+    function drawDeformationAnimation(dataArray, beamType) {
         const svg = document.getElementById('deformSVG');
-        const t = dict[currentLang];
         const isAxial = beamType === 'axial';
-        const amplitude = Math.min(Math.max(Math.abs(maxDeflection) * 100, 5), 80);
-        const midX = 300, startX = 50, endX = 550;
-
-        let pathD = '';
-        if (isAxial) {
-            pathD = `M ${startX} 100 L ${endX} 100`;
-        } else if (beamType === 'cant_pt' || beamType === 'cant_udl') {
-            pathD = `M ${startX} 100 Q ${(startX+endX)/2} ${100 + amplitude} ${endX} ${100 + amplitude*1.5}`;
-        } else {
-            pathD = `M ${startX} 100 Q ${(startX+endX)/2} ${100 + amplitude} ${endX} 100`;
-        }
+        const startX = 50, endX = 550, midX = 300;
 
         const svgBg = getComputedStyle(document.body).getPropertyValue('--radar-bg').trim() || '#0f172a';
         svg.setAttribute('style', `background: ${svgBg}; border-radius: 8px;`);
+        
         const isImp = currentUnitSystem === 'Imperial';
-        const displayDeflection = isImp ? maxDeflection / 25.4 : maxDeflection;
         const unit = isImp ? 'in' : 'mm';
-        svg.innerHTML = `
-            <defs>
-                <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" />
-                </marker>
-            </defs>
-            <line x1="${startX}" y1="100" x2="${endX}" y2="100" stroke="#94a3b8" stroke-width="2" />
-            <path d="${pathD}" fill="none" stroke="#38bdf8" stroke-width="4" stroke-dasharray="8,4" />
-            <text x="${midX}" y="160" fill="${getComputedStyle(document.body).getPropertyValue('--text').trim() || '#f8fafc'}" font-size="14" text-anchor="middle">${t.deflect}: ${displayDeflection.toFixed(4)} ${unit}</text>
-        `;
+        
+        let maxAbsDeflect = Math.max(...dataArray.map(d => Math.abs(d.val)));
+        if (maxAbsDeflect === 0) maxAbsDeflect = 1; // Sınıflandırma hatasını engeller
+
+        let svgContent = `<line x1="${startX}" y1="80" x2="${endX}" y2="80" stroke="#94a3b8" stroke-width="2" />`;
+
+        dataArray.forEach((item, i) => {
+            // Maksimum 70 piksel esneme yapacak şekilde ölçeklendir
+            let maxVisAmp = Math.min(Math.max(maxAbsDeflect * 100, 5), 70); 
+            let amplitude = (item.val / maxAbsDeflect) * maxVisAmp;
+            
+            let pathD = '';
+            if (isAxial) {
+                // Eksenel çekmede eğrileri alt alta (60, 70, 80) çiziyoruz ki net görülsün
+                let shift = (item.val / maxAbsDeflect) * 40; 
+                pathD = `M ${startX} ${65 + i*15} L ${endX + shift} ${65 + i*15}`;
+            } else if (beamType === 'cant_pt' || beamType === 'cant_udl') {
+                pathD = `M ${startX} 80 Q ${(startX+endX)/2} ${80 + amplitude} ${endX} ${80 + amplitude*1.5}`;
+            } else {
+                pathD = `M ${startX} 80 Q ${(startX+endX)/2} ${80 + amplitude} ${endX} 80`;
+            }
+
+            // Çizgiyi çiz
+            svgContent += `<path d="${pathD}" fill="none" stroke="${item.color}" stroke-width="3" stroke-dasharray="8,4" />`;
+            // Legend (Açıklama) metnini yaz
+            svgContent += `<text x="${midX}" y="${180 + i*22}" fill="${item.color}" font-size="14" font-weight="bold" text-anchor="middle">${item.name}: ${item.displayVal.toFixed(4)} ${unit}</text>`;
+        });
+
+        svg.innerHTML = svgContent;
     }
 
     function init() {
