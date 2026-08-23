@@ -293,6 +293,7 @@
 
         .results { display: none; margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--section-border); }
         
+        /* Akıllı Karar Modülü - Emojisiz, Kurumsal Tasarım */
         .insights-container {
             background: linear-gradient(145deg, var(--section-bg), var(--card-bg));
             border: 1px solid var(--primary);
@@ -316,7 +317,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 18px;
+            padding: 14px 20px;
             background: var(--bg);
             border: 1px solid var(--border);
             border-radius: 10px;
@@ -325,7 +326,8 @@
         }
         .insight-item:last-child { margin-bottom: 0; }
         .insight-item strong { color: var(--text); font-size: 15px;}
-        .insight-label { color: var(--muted); display:flex; align-items:center; gap:8px;}
+        .insight-label { color: var(--muted); display:flex; align-items:center; gap:10px; font-weight: 500;}
+        .insight-icon { width: 16px; height: 16px; }
 
         .geo-summary { background: var(--section-bg); padding: 18px; border-radius: 12px; border: 1px solid var(--section-border); margin-bottom: 30px; font-family: 'Inter', monospace; font-size: 14px; text-align: center; color: var(--text); }
         .geo-summary span { color: var(--primary); font-weight: 600; font-size: 15px; margin: 0 10px; }
@@ -369,7 +371,7 @@
         .unit-btn { background: var(--panel); color: var(--muted); border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 12px; transition: 0.2s;}
         .unit-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
 
-        /* YENİ: AeroMech AI Chat Arayüzü Stilleri */
+        /* AeroMech AI Chat Arayüzü (Yerleşik Kural Motoru) */
         .ai-fab {
             position: fixed;
             bottom: 30px;
@@ -428,8 +430,6 @@
             color: var(--text);
         }
         .ai-header-left { display: flex; align-items: center; gap: 8px;}
-        .ai-settings-btn { background: transparent; border: none; color: var(--muted); cursor: pointer; padding: 5px;}
-        .ai-settings-btn:hover { color: var(--primary); }
         
         .ai-messages {
             padding: 20px;
@@ -462,58 +462,20 @@
             font-weight: 500;
         }
         
-        .ai-input-area {
-            padding: 15px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            gap: 10px;
-        }
-        .ai-input {
-            flex: 1;
-            background: var(--input-bg);
-            border: 1px solid var(--input-border);
-            color: var(--text);
-            border-radius: 8px;
-            padding: 10px;
-            font-family: 'Inter', sans-serif;
-            font-size: 13px;
-        }
-        .ai-send-btn {
-            background: var(--text);
-            color: var(--bg);
-            border: none;
-            border-radius: 8px;
-            padding: 0 15px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-        .ai-send-btn:hover { background: var(--primary); color: #000;}
-        
         .ai-analyze-btn {
             background: var(--primary-glow);
             color: var(--primary);
             border: 1px solid rgba(56, 189, 248, 0.3);
             width: calc(100% - 40px);
-            margin: 0 20px 15px 20px;
-            padding: 10px;
+            margin: 0 20px 20px 20px;
+            padding: 12px;
             border-radius: 8px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             transition: 0.2s;
         }
         .ai-analyze-btn:hover { background: var(--primary); color: #000;}
-        
-        /* Modal for API Key */
-        .api-modal {
-            display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8); z-index: 1001; justify-content: center; align-items: center;
-            border-radius: 16px;
-        }
-        .api-modal-content {
-            background: var(--panel); padding: 20px; border-radius: 12px; border: 1px solid var(--border); width: 80%;
-        }
 
         .print-header { display: none; }
         .print-summary-table { display: none; }
@@ -816,7 +778,7 @@
     </div>
 </div>
 
-<!-- YENİ: AEROMECH AI CO-PILOT -->
+<!-- AeroMech AI Co-Pilot (Yerleşik Kural Motoru - API İstemez) -->
 <div class="ai-fab" id="aiFab" onclick="toggleAIChat()">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
@@ -829,30 +791,9 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
             AeroMech AI Co-Pilot
         </div>
-        <button class="ai-settings-btn" onclick="openApiKeyModal()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-        </button>
     </div>
-    <div class="ai-messages" id="aiMessages">
-        <!-- Mesajlar buraya gelecek -->
-    </div>
+    <div class="ai-messages" id="aiMessages"></div>
     <button class="ai-analyze-btn" id="aiAnalyzeBtn" onclick="analyzeCurrentContext()">Mevcut Analizi Yorumla</button>
-    <div class="ai-input-area">
-        <input type="text" class="ai-input" id="aiInput" placeholder="Yapay zekaya soru sorun..." onkeypress="handleAIKeyPress(event)">
-        <button class="ai-send-btn" onclick="sendAIMessage()">Gönder</button>
-    </div>
-</div>
-
-<div class="api-modal" id="apiModal">
-    <div class="api-modal-content">
-        <h3 style="margin-top:0;">Gemini API Anahtarı (İsteğe Bağlı)</h3>
-        <p style="font-size:13px; color:var(--muted); margin-bottom:15px; line-height:1.5;">Gerçek zamanlı yapay zeka deneyimi için Google Gemini API anahtarınızı girebilirsiniz. Boş bırakırsanız AeroMech'in yerleşik Heuristic (Simülasyon) modeli çalışmaya devam edecektir.</p>
-        <input type="text" id="apiKeyInput" placeholder="AIzaSy..." style="margin-bottom:15px;">
-        <div style="display:flex; gap:10px; justify-content:flex-end;">
-            <button class="lang-btn" onclick="document.getElementById('apiModal').style.display='none'">İptal</button>
-            <button class="ai-send-btn" style="padding:10px 20px;" onclick="saveApiKey()">Kaydet</button>
-        </div>
-    </div>
 </div>
 
 <script>
@@ -942,9 +883,8 @@
             bestCost: "Most Cost-Effective",
             bestRigid: "Most Rigid (Least Deflection)",
             noSafe: "All materials are failing. No safe options to recommend.",
-            aiWelcome: "Hello! I am AeroMech AI. Enter your values and click 'Analyze Current Setup' for an engineering review, or ask me anything.",
-            aiAnalyzeBtn: "Analyze Current Setup",
-            aiPlaceholder: "Ask AI..."
+            aiWelcome: "Hello! I am AeroMech AI Co-Pilot. Calculate your simulation and click 'Analyze Setup' below for an engineering review.",
+            aiAnalyzeBtn: "Analyze Current Setup"
         },
         tr: {
             title: "Analyzer Pro",
@@ -985,9 +925,8 @@
             bestCost: "En Ekonomik (Bütçe Dostu)",
             bestRigid: "En Rijit (En Az Esneyen)",
             noSafe: "Tüm malzemeler kritik sınırda. Güvenli bir seçenek yok.",
-            aiWelcome: "Merhaba! Ben AeroMech AI. Değerlerinizi girip 'Mevcut Analizi Yorumla' butonuna basarak mühendislik tavsiyesi alabilir veya bana soru sorabilirsiniz.",
-            aiAnalyzeBtn: "Mevcut Analizi Yorumla",
-            aiPlaceholder: "Yapay zekaya sorun..."
+            aiWelcome: "Merhaba! Ben AeroMech AI. Bir analiz gerçekleştirin ve aşağıdaki 'Mevcut Analizi Yorumla' butonuna basarak mühendislik tavsiyesi alın.",
+            aiAnalyzeBtn: "Mevcut Analizi Yorumla"
         }
     };
 
@@ -1000,8 +939,9 @@
     let lastBeamType = 'supp_pt';
     let radarDataCache = [];
     
-    // YENİ: Yapay Zeka Değişkenleri
+    // AI Değişkenleri
     let aiChatOpen = false;
+    let analysisDataForAI = null; // AI'ın okuyacağı son analiz verileri
 
     // AI Sohbeti Aç/Kapat
     function toggleAIChat() {
@@ -1020,14 +960,6 @@
         }
     }
 
-    function openApiKeyModal() { document.getElementById('apiModal').style.display = 'flex'; }
-    function saveApiKey() {
-        const val = document.getElementById('apiKeyInput').value.trim();
-        localStorage.setItem('gemini_api_key', val);
-        document.getElementById('apiModal').style.display = 'none';
-        appendAIMessage('bot', currentLang === 'tr' ? "API Anahtarı başarıyla ayarlandı!" : "API Key set successfully!");
-    }
-
     function appendAIMessage(sender, text) {
         const msgDiv = document.getElementById('aiMessages');
         const bubble = document.createElement('div');
@@ -1037,84 +969,74 @@
         msgDiv.scrollTop = msgDiv.scrollHeight;
     }
 
-    function handleAIKeyPress(e) { if(e.key === 'Enter') sendAIMessage(); }
-
-    async function sendAIMessage() {
-        const inputEl = document.getElementById('aiInput');
-        const text = inputEl.value.trim();
-        if(!text) return;
-        appendAIMessage('user', text);
-        inputEl.value = '';
-        await processAIRequest(text);
-    }
-
-    async function analyzeCurrentContext() {
-        if(!resultsCalculated) {
+    // YERLEŞİK (OFFLINE) AI KURAL MOTORU
+    function analyzeCurrentContext() {
+        if(!resultsCalculated || !analysisDataForAI) {
             appendAIMessage('bot', currentLang === 'tr' ? "Lütfen önce bir analiz gerçekleştirin (Simülasyonu Başlat)." : "Please run the simulation first.");
             return;
         }
-        appendAIMessage('user', currentLang === 'tr' ? "Sistemi Yorumla" : "Analyze Setup");
         
-        const force = document.getElementById('force').value;
-        const length = document.getElementById('length').value;
-        const beamType = document.getElementById('beamType').options[document.getElementById('beamType').selectedIndex].text;
-        const m1 = materials[document.getElementById('mat1').value].name;
-        const m2 = materials[document.getElementById('mat2').value].name;
-        
-        let promptText = currentLang === 'tr' ? 
-            `Ben bir mühendisim. Sistemimde ${beamType} kullanıyorum. ${force} N kuvvet, ${length} mm uzunluk var. Seçtiğim iki ana malzeme ${m1} ve ${m2}. Kısa ve profesyonel bir mühendislik tavsiyesi ver.` :
-            `I am an engineer. I have a ${beamType} with ${force} N force and ${length} mm length. Materials: ${m1} and ${m2}. Give a short, professional engineering advice.`;
+        appendAIMessage('bot', '<span id="aiTyping">Analiz ediliyor...</span>');
+        document.getElementById('aiAnalyzeBtn').disabled = true;
 
-        await processAIRequest(promptText, true);
-    }
+        setTimeout(() => {
+            const typingEl = document.getElementById('aiTyping');
+            if(typingEl) typingEl.parentNode.remove();
 
-    async function processAIRequest(prompt, isContextAnalysis = false) {
-        const apiKey = localStorage.getItem('gemini_api_key');
-        
-        // EĞER API KEY YOKSA: Yerleşik (Heuristic) Akıllı Simülasyon Çalışır
-        if(!apiKey) {
-            setTimeout(() => {
-                let response = "";
-                if(isContextAnalysis) {
-                    const f = document.getElementById('force').value;
-                    const m1 = materials[document.getElementById('mat1').value].name;
-                    response = currentLang === 'tr' ? 
-                        `<strong>AeroMech Akıllı Yorum (Simülasyon):</strong> Girdiğiniz ${f} birimlik yük altında ${m1} malzemesi yapısal bir tepki verecektir. Sistemin hesapladığı Güvenlik Faktörü tablosunu inceleyiniz. Havacılık projelerinde güvenlik faktörünün en az 1.5 olması tavsiye edilir. <br><br><i style="font-size:11px; color:gray;">Not: Gerçek yapay zeka deneyimi için Ayarlar (⚙️) menüsünden Gemini API anahtarınızı girebilirsiniz.</i>` : 
-                        `<strong>AeroMech Smart Insight (Simulated):</strong> Under the ${f} unit load, ${m1} will respond structurally. Please check the Safety Factor card. Aerospace standards recommend a safety factor of at least 1.5. <br><br><i style="font-size:11px; color:gray;">Note: For real AI generation, insert your Gemini API Key in the Settings (⚙️).</i>`;
-                } else {
-                    response = currentLang === 'tr' ? 
-                        `Şu an "Akıllı Simülasyon" modundayım. Sorunuzu algıladım: <em>"${prompt}"</em>. Bu konuyu detaylı analiz etmek için lütfen hesaplama araçlarını kullanın veya gerçek zamanlı AI için API anahtarı ekleyin.` : 
-                        `I am in "Smart Simulation" mode. I received your input: <em>"${prompt}"</em>. Please use the calculation tools or add an API key for live AI responses.`;
+            const { force, length, beamName, maxStress, safeMats, failMats } = analysisDataForAI;
+            let report = "";
+
+            if (currentLang === 'tr') {
+                report += `<strong>Sistem Analizi Tamamlandı:</strong><br>`;
+                report += `Sisteme <strong>${force} birim</strong> kuvvet uygulanıyor. Oluşan maksimum gerilme yaklaşık <strong>${maxStress.toFixed(1)} MPa/psi</strong> seviyesindedir.<br><br>`;
+                
+                if (failMats.length > 0) {
+                    report += `⚠️ <strong>Uyarı:</strong> ${failMats.map(m=>m.name).join(', ')} malzemeleri bu yük altında akma sınırını geçerek plastik deformasyona uğrayacaktır. Yapısal olarak kullanılamazlar.<br><br>`;
                 }
-                appendAIMessage('bot', response);
-            }, 800);
-            return;
-        }
+                
+                if (safeMats.length === 0) {
+                    report += `🚨 <strong>Kritik Durum:</strong> Seçtiğiniz hiçbir malzeme bu yükü taşıyamıyor. Lütfen kesit alanını (profil boyutlarını) büyütün veya daha mukavemetli bir çelik alaşımı seçin.`;
+                } else {
+                    report += `✅ <strong>Güvenli Malzemeler:</strong> ${safeMats.map(m=>m.name).join(', ')} bu sistemi güvenle taşır.<br><br>`;
+                    
+                    let bestW = safeMats.reduce((prev, curr) => prev.weight < curr.weight ? prev : curr);
+                    let bestC = safeMats.reduce((prev, curr) => prev.cost < curr.cost ? prev : curr);
 
-        // EĞER API KEY VARSA: Gerçek Gemini AI Çağrısı Yapılır
-        appendAIMessage('bot', '<span id="aiTyping">...</span>');
-        try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-            });
-            const data = await res.json();
-            const typingEl = document.getElementById('aiTyping');
-            if(typingEl) typingEl.parentNode.remove();
-            
-            if(data.candidates && data.candidates[0].content.parts[0].text) {
-                // Markdown kalın yazıları HTML'e çevir
-                let text = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                appendAIMessage('bot', text);
+                    report += `<strong>Mühendislik Tavsiyesi:</strong><br>`;
+                    if (bestW.name === bestC.name) {
+                        report += `Bu senaryo için <strong>${bestW.name}</strong> hem en hafif hem de en ekonomik seçenektir. Üretim bandı için doğrudan bu malzemeyi önerebilirsiniz.`;
+                    } else {
+                        report += `Eğer proje bir havacılık/mobilite projesi ise (ağırlık kritikse) <strong>${bestW.name}</strong> kullanılmalıdır. Ancak statik bir zemin projesi ise maliyetleri düşürmek için <strong>${bestC.name}</strong> tercih edilmelidir.`;
+                    }
+                }
             } else {
-                appendAIMessage('bot', "API Error: No response generated.");
+                report += `<strong>System Analysis Complete:</strong><br>`;
+                report += `Under the <strong>${force} unit</strong> force, the maximum stress is approximately <strong>${maxStress.toFixed(1)} MPa/psi</strong>.<br><br>`;
+                
+                if (failMats.length > 0) {
+                    report += `⚠️ <strong>Warning:</strong> ${failMats.map(m=>m.name).join(', ')} will yield and undergo plastic deformation. Not recommended.<br><br>`;
+                }
+                
+                if (safeMats.length === 0) {
+                    report += `🚨 <strong>Critical:</strong> None of the selected materials can hold this load. Please increase the cross-section dimensions or select a stronger alloy.`;
+                } else {
+                    report += `✅ <strong>Safe Materials:</strong> ${safeMats.map(m=>m.name).join(', ')} can safely withstand this load.<br><br>`;
+                    
+                    let bestW = safeMats.reduce((prev, curr) => prev.weight < curr.weight ? prev : curr);
+                    let bestC = safeMats.reduce((prev, curr) => prev.cost < curr.cost ? prev : curr);
+
+                    report += `<strong>Engineering Advice:</strong><br>`;
+                    if (bestW.name === bestC.name) {
+                        report += `For this scenario, <strong>${bestW.name}</strong> is both the lightest and most cost-effective option. Highly recommended.`;
+                    } else {
+                        report += `If this is an aerospace/mobility project, go with <strong>${bestW.name}</strong> for weight reduction. If it's a static ground structure, choose <strong>${bestC.name}</strong> to save costs.`;
+                    }
+                }
             }
-        } catch(err) {
-            const typingEl = document.getElementById('aiTyping');
-            if(typingEl) typingEl.parentNode.remove();
-            appendAIMessage('bot', `Bağlantı hatası veya geçersiz API Anahtarı. Lütfen kontrol edin.`);
-        }
+            
+            appendAIMessage('bot', report);
+            document.getElementById('aiAnalyzeBtn').disabled = false;
+        }, 1200); // Gerçekçi bir "düşünme" süresi efekti
     }
 
 
@@ -1155,9 +1077,6 @@
         } else {
             materials = { ...defaultMaterials };
         }
-        
-        const storedKey = localStorage.getItem('gemini_api_key');
-        if(storedKey) document.getElementById('apiKeyInput').value = storedKey;
     }
 
     function saveCustomMaterials() {
@@ -1375,7 +1294,6 @@
             calculate();
         }
         
-        // AI açık ve ilk mesaja sahipse dili güncelle
         const msgs = document.getElementById('aiMessages');
         if(msgs.children.length === 1 && msgs.children[0].classList.contains('msg-bot')) {
             msgs.children[0].innerHTML = dict[currentLang].aiWelcome;
@@ -1452,9 +1370,7 @@
         document.getElementById('btnExpert').textContent = expertMode ? t.expertModeOn : t.expertModeOff;
         
         document.getElementById('themeBtn').textContent = isLight ? t.themeDark : t.themeLight;
-        
         document.getElementById('aiAnalyzeBtn').textContent = t.aiAnalyzeBtn;
-        document.getElementById('aiInput').placeholder = t.aiPlaceholder;
         
         populateDropdowns();
         renderCustomList();
@@ -1748,6 +1664,16 @@
             radarDataCache.push({ name: mat.name, values: [mat.density, mat.yield, mat.eMod, mat.cost, mat.alpha] });
         });
 
+        // AI'ın okuyabilmesi için sistem değişkenlerini hafızaya al
+        analysisDataForAI = {
+            force: rawForce,
+            length: rawLength,
+            beamName: beamName,
+            maxStress: maxStress * (isImp ? 145.038 : 1),
+            safeMats: safeMaterials,
+            failMats: keys.map(k=>materials[k]).filter(m => !safeMaterials.find(s => s.name === m.name))
+        };
+
         const insightsDiv = document.getElementById('insightsContainer');
         if (safeMaterials.length === 0) {
             insightsDiv.innerHTML = `
@@ -1767,15 +1693,15 @@
                     ${t.insightsTitle}
                 </div>
                 <div class="insight-item">
-                    <span class="insight-label"><span style="color:#38bdf8;">✈️</span> ${t.bestWeight}</span>
+                    <span class="insight-label"><svg class="insight-icon" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M22 12L2 22l4-10-4-10z"></path></svg> ${t.bestWeight}</span>
                     <strong>${bestW.name} <span style="color:var(--muted); font-size:13px; font-weight:400;">(${bestW.weight.toFixed(1)} ${bestW.unitW})</span></strong>
                 </div>
                 <div class="insight-item">
-                    <span class="insight-label"><span style="color:#10b981;">💰</span> ${t.bestCost}</span>
+                    <span class="insight-label"><svg class="insight-icon" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> ${t.bestCost}</span>
                     <strong>${bestC.name} <span style="color:var(--muted); font-size:13px; font-weight:400;">($${bestC.cost.toFixed(2)})</span></strong>
                 </div>
                 <div class="insight-item">
-                    <span class="insight-label"><span style="color:#8b5cf6;">🧱</span> ${t.bestRigid}</span>
+                    <span class="insight-label"><svg class="insight-icon" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg> ${t.bestRigid}</span>
                     <strong>${bestD.name} <span style="color:var(--muted); font-size:13px; font-weight:400;">(${bestD.deflect.toFixed(3)} ${bestD.unitD})</span></strong>
                 </div>`;
         }
