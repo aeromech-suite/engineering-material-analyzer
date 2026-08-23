@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AeroMech Analyzer Pro</title>
-    <!-- Modern Kurumsal Tipografi -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -70,7 +69,6 @@
             z-index: 1;
         }
 
-        /* Arka Plan Izgarası */
         .bg-grid {
             position: absolute;
             top: 0; left: 0; right: 0; height: 100vh;
@@ -85,7 +83,6 @@
             background-image: linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
         }
 
-        /* Glassmorphic Navbar */
         .navbar {
             width: 100%;
             padding: 15px 40px;
@@ -139,7 +136,6 @@
             box-sizing: border-box;
         }
         
-        /* Şık Sekmeler (Tabs) */
         .tabs { 
             display: flex; 
             gap: 8px; 
@@ -195,7 +191,6 @@
             gap: 10px; 
             font-weight: 600;
         }
-        /* Yeni Rozet Tipi Sayılar */
         .step-num { 
             background: var(--primary-glow); 
             color: var(--primary); 
@@ -264,7 +259,6 @@
         .beam-inputs, .geo-inputs { display: none; }
         .beam-inputs.active, .geo-inputs.active { display: block; animation: fadeIn 0.2s; }
         
-        /* Modern Butonlar */
         button.calc-btn { 
             width: 100%; 
             padding: 16px; 
@@ -297,12 +291,47 @@
         .edit-btn { background: transparent; color: var(--primary); border: 1px solid var(--primary); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; margin-right: 5px; transition: 0.2s;}
         .edit-btn:hover { background: var(--primary); color: #000;}
 
-        /* Sonuç Ekranları */
         .results { display: none; margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--section-border); }
+        
+        /* YENİ: Akıllı Karar Modülü Tasarımı */
+        .insights-container {
+            background: linear-gradient(145deg, var(--section-bg), var(--card-bg));
+            border: 1px solid var(--primary);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px var(--primary-glow);
+        }
+        .insights-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px dashed var(--primary-glow);
+            padding-bottom: 10px;
+        }
+        .insight-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 18px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        .insight-item:last-child { margin-bottom: 0; }
+        .insight-item strong { color: var(--text); font-size: 15px;}
+        .insight-label { color: var(--muted); display:flex; align-items:center; gap:8px;}
+
         .geo-summary { background: var(--section-bg); padding: 18px; border-radius: 12px; border: 1px solid var(--section-border); margin-bottom: 30px; font-family: 'Inter', monospace; font-size: 14px; text-align: center; color: var(--text); }
         .geo-summary span { color: var(--primary); font-weight: 600; font-size: 15px; margin: 0 10px; }
         
-        .result-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        .result-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-bottom: 30px;}
         .card { background: var(--panel); padding: 25px; border-radius: 16px; border: 1px solid var(--border); border-top: 4px solid var(--card-border); position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s; }
         .card:hover { transform: translateY(-5px); }
         .card h4 { margin: 0 0 20px 0; font-size: 18px; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: 600;}
@@ -353,6 +382,11 @@
             .print-header { display: flex !important; justify-content: space-between; border-bottom: 2px solid #000; margin-bottom: 25px; padding-bottom: 15px; align-items: flex-end;}
             .print-header h1 { color: #000 !important; font-size: 22px; margin: 0 0 8px 0; letter-spacing: -0.5px;}
             .print-header p { margin: 3px 0; font-size: 12px; color: #333 !important; }
+            
+            .insights-container { background: #f8fafc !important; border: 1px solid #000 !important; color: #000 !important; margin-bottom:20px; box-shadow:none !important;}
+            .insights-title { color: #000 !important; border-bottom: 1px solid #ccc !important; }
+            .insight-item { background: #fff !important; border: 1px solid #ccc !important; color: #000 !important; }
+
             .print-summary-table { display: table !important; width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 12px;}
             .print-summary-table th { background: #f1f5f9 !important; text-align: left; padding: 10px; border: 1px solid #cbd5e1 !important; color: #000 !important; font-weight: 600;}
             .print-summary-table td { padding: 10px; border: 1px solid #cbd5e1 !important; color: #000 !important;}
@@ -405,7 +439,7 @@
         <div class="grid-3">
             <div class="input-group">
                 <h3 id="grpLoad"><span class="step-num">1</span> Statik Yükleme Senaryosu</h3>
-                <label id="lblBeamType">Kuvvetin Uygulanma Şekli <span class="tooltip">ⓘ<span class="tooltiptext" id="tipBeamType"></span></span></label>
+                <label id="lblBeamType">Kuvvetin Uygulanma Şekli <span class="tooltip">i<span class="tooltiptext" id="tipBeamType"></span></span></label>
                 <select id="beamType" onchange="changeBeam()">
                     <option value="axial" id="optAxial">Saf Eksenel Çekme / Basma</option>
                     <option value="cant_pt" id="optCantPt">Konsol Kiriş - Uçtan Tekil Yük</option>
@@ -485,7 +519,7 @@
             
             <div class="input-group">
                 <h3 id="grpGeo"><span class="step-num">2</span> Kesit Geometrisi</h3>
-                <label id="lblProfile">Kesit Profili (Şekli) <span class="tooltip">ⓘ<span class="tooltiptext" id="tipProfile"></span></span></label>
+                <label id="lblProfile">Kesit Profili (Şekli) <span class="tooltip">i<span class="tooltiptext" id="tipProfile"></span></span></label>
                 <select id="profileType" onchange="changeProfile()">
                     <option value="rect_solid" id="optRectSolid">Dolu Dikdörtgen Kiriş</option>
                     <option value="rect_hollow" id="optRectHollow">İçi Boş Kutu Profil</option>
@@ -613,6 +647,9 @@
         <table class="print-summary-table" id="printSummaryTable"></table>
 
         <div class="geo-summary" id="geoSummaryDiv"></div>
+
+        <!-- YENİ: YAPAY ZEKA DESTEKLİ KARAR MODÜLÜ (SMART INSIGHTS) -->
+        <div id="insightsContainer" class="insights-container" style="display:none;"></div>
         
         <div class="result-cards" id="cardsContainer"></div>
         
@@ -699,6 +736,7 @@
             weight: "Est. Weight", stressAxial: "Axial Stress (σa)", stressBend: "Bending Stress (σb)", stressShear: "Avg Shear Stress (τ)", stressMax: "Max Principal Stress",
             expansion: "Thermal Expansion (ΔL)", deflect: "Max Deflection (δ)", costLbl: "Total Part Cost", factor: "Safety Factor",
             safe: "SAFE (Structure holds)", fail: "CRITICAL (Material yields)",
+            specificStrength: "Specific Strength", // YENİ
             grpCustom: "Add Custom Material", customDesc: "Materials you add are saved to your browser automatically.",
             grpList: "My Saved Materials", lblCName: "Material Name", lblCDens: "Density (g/cm³)",
             lblCYield: "Yield (MPa)", lblCAlpha: "Alpha (10^-6)", lblCEmod: "E. Modulus (GPa)", lblCCost: "Cost ($/kg)",
@@ -715,7 +753,12 @@
             expertModeOn: "Expert Mode (Close)", expertModeOff: "Expert Mode (Edit Defaults)",
             themeLight: "Light Theme", themeDark: "Dark Theme",
             radarLabels: ['Density', 'Yield', 'E.Mod', 'Cost', 'Alpha'],
-            printAppWarning: "To generate a PDF report, please open this page in your system browser (Safari/Chrome) using the top right menu. In-app browsers block file downloads."
+            printAppWarning: "To generate a PDF report, please open this page in your system browser (Safari/Chrome) using the top right menu. In-app browsers block file downloads.",
+            insightsTitle: "Smart Optimization Insights", // YENİ
+            bestWeight: "Best for Aerospace (Lightest)",
+            bestCost: "Most Cost-Effective",
+            bestRigid: "Most Rigid (Least Deflection)",
+            noSafe: "All materials are failing. No safe options to recommend."
         },
         tr: {
             title: "Analyzer Pro",
@@ -733,6 +776,7 @@
             weight: "Tahmini Ağırlık", stressAxial: "Eksenel Gerilme (σa)", stressBend: "Eğilme Gerilmesi (σb)", stressShear: "Ort. Kesme Gerilmesi (τ)", stressMax: "Maksimum Asal Gerilme",
             expansion: "Isıl Genleşme (ΔL)", deflect: "Maks. Sehim / Esneme (δ)", costLbl: "Parça Maliyeti", factor: "Güvenlik Faktörü",
             safe: "GÜVENLİ (Yapı dayanır)", fail: "KRİTİK (Akma/Kırılma)",
+            specificStrength: "Özgül Mukavemet", // YENİ
             grpCustom: "Yeni Özel Malzeme Ekle", customDesc: "Eklediğiniz malzemeler tarayıcınıza otomatik kaydedilir.",
             grpList: "Kayıtlı Malzemelerim", lblCName: "Malzeme Adı", lblCDens: "Yoğunluk (g/cm³)",
             lblCYield: "Akma Day. (MPa)", lblCAlpha: "Alfa Gen. (10^-6)", lblCEmod: "E. Modülü (GPa)", lblCCost: "Fiyat ($/kg)",
@@ -749,7 +793,12 @@
             expertModeOn: "Uzman Modu (Kapat)", expertModeOff: "Uzman Modu (Varsayılanları Düzenle)",
             themeLight: "Açık Tema", themeDark: "Koyu Tema",
             radarLabels: ['Yoğunluk', 'Akma', 'E.Modül', 'Fiyat', 'Alfa'],
-            printAppWarning: "PDF oluşturmak için lütfen sağ üstteki (veya sağ alttaki) menüden 'Tarayıcıda Aç' (Chrome/Safari) seçeneğini kullanın. LinkedIn gibi uygulamalar PDF indirmeyi güvenlik sebebiyle engeller."
+            printAppWarning: "PDF oluşturmak için lütfen sağ üstteki (veya sağ alttaki) menüden 'Tarayıcıda Aç' (Chrome/Safari) seçeneğini kullanın. LinkedIn gibi uygulamalar PDF indirmeyi güvenlik sebebiyle engeller.",
+            insightsTitle: "AeroMech Karar Destek Modülü", // YENİ
+            bestWeight: "Havacılık İçin En İyi (En Hafif)",
+            bestCost: "En Ekonomik (Bütçe Dostu)",
+            bestRigid: "En Rijit (En Az Esneyen)",
+            noSafe: "Tüm malzemeler kritik sınırda. Güvenli bir seçenek yok."
         }
     };
 
@@ -1035,18 +1084,18 @@
         
         document.getElementById('matSearch').placeholder = t.searchPlaceholder;
 
-        document.getElementById('lblBeamType').innerHTML = t.lblBeamType + ` <span class="tooltip">ⓘ<span class="tooltiptext">${t.tipBeamType}</span></span>`;
+        document.getElementById('lblBeamType').innerHTML = t.lblBeamType + ` <span class="tooltip">i<span class="tooltiptext">${t.tipBeamType}</span></span>`;
         document.getElementById('optAxial').innerText = t.optAxial;
         document.getElementById('optCantPt').innerText = t.optCantPt;
         document.getElementById('optCantUdl').innerText = t.optCantUdl;
         document.getElementById('optSuppPt').innerText = t.optSuppPt;
         document.getElementById('optSuppUdl').innerText = t.optSuppUdl;
         
-        document.getElementById('lblForce').innerHTML = `${t.lblForceBase} (${uF}) <span class="tooltip">ⓘ<span class="tooltiptext">${t.tipForce}</span></span>`;
-        document.getElementById('lblLength').innerHTML = `${t.lblLengthBase} (${uL}) <span class="tooltip">ⓘ<span class="tooltiptext">${t.tipLength}</span></span>`;
+        document.getElementById('lblForce').innerHTML = `${t.lblForceBase} (${uF})`;
+        document.getElementById('lblLength').innerHTML = `${t.lblLengthBase} (${uL})`;
         document.getElementById('lblTemp').innerText = `${t.lblTempBase} (${uT})`;
         
-        document.getElementById('lblProfile').innerHTML = t.lblProfile + ` <span class="tooltip">ⓘ<span class="tooltiptext">${t.tipProfile}</span></span>`;
+        document.getElementById('lblProfile').innerHTML = t.lblProfile + ` <span class="tooltip">i<span class="tooltiptext">${t.tipProfile}</span></span>`;
         document.getElementById('optRectSolid').innerText = t.optRectSolid;
         document.getElementById('optRectHollow').innerText = t.optRectHollow;
         document.getElementById('optSolid').innerText = t.optSolid;
@@ -1292,6 +1341,8 @@
 
         radarDataCache = [];
         lastDeflectionData = []; 
+        let safeMaterials = []; // YENİ: Akıllı Optimizasyon İçin
+
         const colorsArr = ['#38bdf8', '#10b981', '#ef4444'];
 
         keys.forEach((key, index) => {
@@ -1321,6 +1372,20 @@
             const displayStress = maxStress * stressUnit;
             const displayYield = mat.yield * stressUnit;
 
+            // YENİ: Özgül Mukavemet Hesabı (MPa / g/cm3)
+            const specificStrength = (mat.yield / mat.density).toFixed(1); 
+
+            if (isSafe) {
+                safeMaterials.push({
+                    name: mat.name,
+                    weight: displayWeight,
+                    cost: totalCost,
+                    deflect: Math.abs(displayDeflection),
+                    unitW: isImp ? 'lb' : 'g',
+                    unitD: isImp ? 'in' : 'mm'
+                });
+            }
+
             lastDeflectionData.push({
                 name: mat.name,
                 val: deflection,
@@ -1332,8 +1397,9 @@
                 <div class="card" style="border-top-color: ${isSafe ? '#10b981' : '#ef4444'}">
                     <h4>${mat.name} <span class="cost-badge">$${totalCost.toFixed(2)}</span></h4>
                     <div class="data-row"><span>${t.weight}:</span> <span>${displayWeight.toFixed(3)} ${isImp ? 'lb' : 'g'}</span></div>
-                    <div class="data-row"><span>${t.expansion}:</span> <span style="color:var(--primary); font-weight:600;">${displayExpansion.toFixed(4)} ${isImp ? 'in' : 'mm'}</span></div>
+                    <div class="data-row"><span>${t.specificStrength}:</span> <span style="color:var(--primary); font-weight:600;">${specificStrength}</span></div>
                     <div class="data-row"><span>${t.deflect}:</span> <span style="color:var(--deflect); font-weight:600;">${displayDeflection.toFixed(4)} ${isImp ? 'in' : 'mm'}</span></div>
+                    <div class="data-row"><span>${t.expansion}:</span> <span>${displayExpansion.toFixed(4)} ${isImp ? 'in' : 'mm'}</span></div>
                     <div class="stress-box">
                         <div class="stress-row"><span>${t.stressAxial}:</span> <span>${(axialStress * stressUnit).toFixed(1)} ${isImp ? 'psi' : 'MPa'}</span></div>
                         <div class="stress-row"><span>${t.stressBend}:</span> <span>${(bendingStress * stressUnit).toFixed(1)} ${isImp ? 'psi' : 'MPa'}</span></div>
@@ -1363,6 +1429,40 @@
 
             radarDataCache.push({ name: mat.name, values: [mat.density, mat.yield, mat.eMod, mat.cost, mat.alpha] });
         });
+
+        // YENİ: Akıllı Optimizasyon Çıktısı (Sadece güvenli olanlar arasında kıyaslar)
+        const insightsDiv = document.getElementById('insightsContainer');
+        if (safeMaterials.length === 0) {
+            insightsDiv.innerHTML = `
+                <div class="insights-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    ${t.insightsTitle}
+                </div>
+                <div style="color:var(--danger); font-weight:500;">${t.noSafe}</div>`;
+        } else {
+            let bestW = safeMaterials.reduce((prev, curr) => prev.weight < curr.weight ? prev : curr);
+            let bestC = safeMaterials.reduce((prev, curr) => prev.cost < curr.cost ? prev : curr);
+            let bestD = safeMaterials.reduce((prev, curr) => prev.deflect < curr.deflect ? prev : curr);
+            
+            insightsDiv.innerHTML = `
+                <div class="insights-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    ${t.insightsTitle}
+                </div>
+                <div class="insight-item">
+                    <span class="insight-label"><span style="color:#38bdf8;">✈️</span> ${t.bestWeight}</span>
+                    <strong>${bestW.name} <span style="color:var(--muted); font-size:13px; font-weight:400;">(${bestW.weight.toFixed(1)} ${bestW.unitW})</span></strong>
+                </div>
+                <div class="insight-item">
+                    <span class="insight-label"><span style="color:#10b981;">💰</span> ${t.bestCost}</span>
+                    <strong>${bestC.name} <span style="color:var(--muted); font-size:13px; font-weight:400;">($${bestC.cost.toFixed(2)})</span></strong>
+                </div>
+                <div class="insight-item">
+                    <span class="insight-label"><span style="color:#8b5cf6;">🧱</span> ${t.bestRigid}</span>
+                    <strong>${bestD.name} <span style="color:var(--muted); font-size:13px; font-weight:400;">(${bestD.deflect.toFixed(3)} ${bestD.unitD})</span></strong>
+                </div>`;
+        }
+        insightsDiv.style.display = 'block';
 
         document.getElementById('cardsContainer').innerHTML = cardsHtml;
         document.getElementById('chartBars').innerHTML = chartHtml;
