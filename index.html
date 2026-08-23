@@ -293,7 +293,6 @@
 
         .results { display: none; margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--section-border); }
         
-        /* YENİ: Akıllı Karar Modülü Tasarımı */
         .insights-container {
             background: linear-gradient(145deg, var(--section-bg), var(--card-bg));
             border: 1px solid var(--primary);
@@ -370,13 +369,159 @@
         .unit-btn { background: var(--panel); color: var(--muted); border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 12px; transition: 0.2s;}
         .unit-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
 
+        /* YENİ: AeroMech AI Chat Arayüzü Stilleri */
+        .ai-fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 25px var(--primary-glow);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .ai-fab:hover { transform: scale(1.1); }
+        
+        .ai-chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            max-height: 500px;
+            background: rgba(11, 17, 32, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            z-index: 999;
+            transform: translateY(20px);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .ai-chat-window.open {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+        body.light-theme .ai-chat-window { background: rgba(255, 255, 255, 0.9); }
+        
+        .ai-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text);
+        }
+        .ai-header-left { display: flex; align-items: center; gap: 8px;}
+        .ai-settings-btn { background: transparent; border: none; color: var(--muted); cursor: pointer; padding: 5px;}
+        .ai-settings-btn:hover { color: var(--primary); }
+        
+        .ai-messages {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-height: 250px;
+        }
+        .ai-msg {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .msg-bot {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            color: var(--text);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        .msg-user {
+            background: var(--primary);
+            color: #000;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .ai-input-area {
+            padding: 15px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+        }
+        .ai-input {
+            flex: 1;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text);
+            border-radius: 8px;
+            padding: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+        }
+        .ai-send-btn {
+            background: var(--text);
+            color: var(--bg);
+            border: none;
+            border-radius: 8px;
+            padding: 0 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .ai-send-btn:hover { background: var(--primary); color: #000;}
+        
+        .ai-analyze-btn {
+            background: var(--primary-glow);
+            color: var(--primary);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            width: calc(100% - 40px);
+            margin: 0 20px 15px 20px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .ai-analyze-btn:hover { background: var(--primary); color: #000;}
+        
+        /* Modal for API Key */
+        .api-modal {
+            display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8); z-index: 1001; justify-content: center; align-items: center;
+            border-radius: 16px;
+        }
+        .api-modal-content {
+            background: var(--panel); padding: 20px; border-radius: 12px; border: 1px solid var(--border); width: 80%;
+        }
+
         .print-header { display: none; }
         .print-summary-table { display: none; }
 
         @media print {
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             body { background: #ffffff !important; color: #000000 !important; padding: 0; font-family: 'Inter', sans-serif; }
-            .bg-grid, .navbar, .tabs, #tab-materials, .grid-3, .calc-btn, .print-btn, .template-btn, .unit-selector { display: none !important; }
+            .bg-grid, .navbar, .tabs, #tab-materials, .grid-3, .calc-btn, .print-btn, .template-btn, .unit-selector, .ai-fab, .ai-chat-window { display: none !important; }
             .container { box-shadow: none !important; max-width: 100% !important; border-radius: 0 !important; padding: 0 !important; border: none !important; background: #fff !important; }
             .results { display: block !important; margin-top: 0 !important; border: none !important; padding-top: 0 !important; }
             .print-header { display: flex !important; justify-content: space-between; border-bottom: 2px solid #000; margin-bottom: 25px; padding-bottom: 15px; align-items: flex-end;}
@@ -648,7 +793,6 @@
 
         <div class="geo-summary" id="geoSummaryDiv"></div>
 
-        <!-- YENİ: YAPAY ZEKA DESTEKLİ KARAR MODÜLÜ (SMART INSIGHTS) -->
         <div id="insightsContainer" class="insights-container" style="display:none;"></div>
         
         <div class="result-cards" id="cardsContainer"></div>
@@ -669,6 +813,45 @@
         </div>
         
         <button class="print-btn calc-btn" onclick="triggerPrint()" id="printBtn">PDF Raporu Oluştur</button>
+    </div>
+</div>
+
+<!-- YENİ: AEROMECH AI CO-PILOT -->
+<div class="ai-fab" id="aiFab" onclick="toggleAIChat()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+    </svg>
+</div>
+
+<div class="ai-chat-window" id="aiChatWindow">
+    <div class="ai-header">
+        <div class="ai-header-left">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+            AeroMech AI Co-Pilot
+        </div>
+        <button class="ai-settings-btn" onclick="openApiKeyModal()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </button>
+    </div>
+    <div class="ai-messages" id="aiMessages">
+        <!-- Mesajlar buraya gelecek -->
+    </div>
+    <button class="ai-analyze-btn" id="aiAnalyzeBtn" onclick="analyzeCurrentContext()">Mevcut Analizi Yorumla</button>
+    <div class="ai-input-area">
+        <input type="text" class="ai-input" id="aiInput" placeholder="Yapay zekaya soru sorun..." onkeypress="handleAIKeyPress(event)">
+        <button class="ai-send-btn" onclick="sendAIMessage()">Gönder</button>
+    </div>
+</div>
+
+<div class="api-modal" id="apiModal">
+    <div class="api-modal-content">
+        <h3 style="margin-top:0;">Gemini API Anahtarı (İsteğe Bağlı)</h3>
+        <p style="font-size:13px; color:var(--muted); margin-bottom:15px; line-height:1.5;">Gerçek zamanlı yapay zeka deneyimi için Google Gemini API anahtarınızı girebilirsiniz. Boş bırakırsanız AeroMech'in yerleşik Heuristic (Simülasyon) modeli çalışmaya devam edecektir.</p>
+        <input type="text" id="apiKeyInput" placeholder="AIzaSy..." style="margin-bottom:15px;">
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+            <button class="lang-btn" onclick="document.getElementById('apiModal').style.display='none'">İptal</button>
+            <button class="ai-send-btn" style="padding:10px 20px;" onclick="saveApiKey()">Kaydet</button>
+        </div>
     </div>
 </div>
 
@@ -736,7 +919,7 @@
             weight: "Est. Weight", stressAxial: "Axial Stress (σa)", stressBend: "Bending Stress (σb)", stressShear: "Avg Shear Stress (τ)", stressMax: "Max Principal Stress",
             expansion: "Thermal Expansion (ΔL)", deflect: "Max Deflection (δ)", costLbl: "Total Part Cost", factor: "Safety Factor",
             safe: "SAFE (Structure holds)", fail: "CRITICAL (Material yields)",
-            specificStrength: "Specific Strength", // YENİ
+            specificStrength: "Specific Strength",
             grpCustom: "Add Custom Material", customDesc: "Materials you add are saved to your browser automatically.",
             grpList: "My Saved Materials", lblCName: "Material Name", lblCDens: "Density (g/cm³)",
             lblCYield: "Yield (MPa)", lblCAlpha: "Alpha (10^-6)", lblCEmod: "E. Modulus (GPa)", lblCCost: "Cost ($/kg)",
@@ -754,11 +937,14 @@
             themeLight: "Light Theme", themeDark: "Dark Theme",
             radarLabels: ['Density', 'Yield', 'E.Mod', 'Cost', 'Alpha'],
             printAppWarning: "To generate a PDF report, please open this page in your system browser (Safari/Chrome) using the top right menu. In-app browsers block file downloads.",
-            insightsTitle: "Smart Optimization Insights", // YENİ
+            insightsTitle: "Smart Optimization Insights",
             bestWeight: "Best for Aerospace (Lightest)",
             bestCost: "Most Cost-Effective",
             bestRigid: "Most Rigid (Least Deflection)",
-            noSafe: "All materials are failing. No safe options to recommend."
+            noSafe: "All materials are failing. No safe options to recommend.",
+            aiWelcome: "Hello! I am AeroMech AI. Enter your values and click 'Analyze Current Setup' for an engineering review, or ask me anything.",
+            aiAnalyzeBtn: "Analyze Current Setup",
+            aiPlaceholder: "Ask AI..."
         },
         tr: {
             title: "Analyzer Pro",
@@ -776,7 +962,7 @@
             weight: "Tahmini Ağırlık", stressAxial: "Eksenel Gerilme (σa)", stressBend: "Eğilme Gerilmesi (σb)", stressShear: "Ort. Kesme Gerilmesi (τ)", stressMax: "Maksimum Asal Gerilme",
             expansion: "Isıl Genleşme (ΔL)", deflect: "Maks. Sehim / Esneme (δ)", costLbl: "Parça Maliyeti", factor: "Güvenlik Faktörü",
             safe: "GÜVENLİ (Yapı dayanır)", fail: "KRİTİK (Akma/Kırılma)",
-            specificStrength: "Özgül Mukavemet", // YENİ
+            specificStrength: "Özgül Mukavemet",
             grpCustom: "Yeni Özel Malzeme Ekle", customDesc: "Eklediğiniz malzemeler tarayıcınıza otomatik kaydedilir.",
             grpList: "Kayıtlı Malzemelerim", lblCName: "Malzeme Adı", lblCDens: "Yoğunluk (g/cm³)",
             lblCYield: "Akma Day. (MPa)", lblCAlpha: "Alfa Gen. (10^-6)", lblCEmod: "E. Modülü (GPa)", lblCCost: "Fiyat ($/kg)",
@@ -794,11 +980,14 @@
             themeLight: "Açık Tema", themeDark: "Koyu Tema",
             radarLabels: ['Yoğunluk', 'Akma', 'E.Modül', 'Fiyat', 'Alfa'],
             printAppWarning: "PDF oluşturmak için lütfen sağ üstteki (veya sağ alttaki) menüden 'Tarayıcıda Aç' (Chrome/Safari) seçeneğini kullanın. LinkedIn gibi uygulamalar PDF indirmeyi güvenlik sebebiyle engeller.",
-            insightsTitle: "AeroMech Karar Destek Modülü", // YENİ
+            insightsTitle: "AeroMech Karar Destek Modülü",
             bestWeight: "Havacılık İçin En İyi (En Hafif)",
             bestCost: "En Ekonomik (Bütçe Dostu)",
             bestRigid: "En Rijit (En Az Esneyen)",
-            noSafe: "Tüm malzemeler kritik sınırda. Güvenli bir seçenek yok."
+            noSafe: "Tüm malzemeler kritik sınırda. Güvenli bir seçenek yok.",
+            aiWelcome: "Merhaba! Ben AeroMech AI. Değerlerinizi girip 'Mevcut Analizi Yorumla' butonuna basarak mühendislik tavsiyesi alabilir veya bana soru sorabilirsiniz.",
+            aiAnalyzeBtn: "Mevcut Analizi Yorumla",
+            aiPlaceholder: "Yapay zekaya sorun..."
         }
     };
 
@@ -810,6 +999,124 @@
     let lastDeflectionData = [];
     let lastBeamType = 'supp_pt';
     let radarDataCache = [];
+    
+    // YENİ: Yapay Zeka Değişkenleri
+    let aiChatOpen = false;
+
+    // AI Sohbeti Aç/Kapat
+    function toggleAIChat() {
+        aiChatOpen = !aiChatOpen;
+        const windowEl = document.getElementById('aiChatWindow');
+        const fabEl = document.getElementById('aiFab');
+        if(aiChatOpen) {
+            windowEl.classList.add('open');
+            fabEl.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+            if(document.getElementById('aiMessages').innerHTML.trim() === '') {
+                appendAIMessage('bot', dict[currentLang].aiWelcome);
+            }
+        } else {
+            windowEl.classList.remove('open');
+            fabEl.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>`;
+        }
+    }
+
+    function openApiKeyModal() { document.getElementById('apiModal').style.display = 'flex'; }
+    function saveApiKey() {
+        const val = document.getElementById('apiKeyInput').value.trim();
+        localStorage.setItem('gemini_api_key', val);
+        document.getElementById('apiModal').style.display = 'none';
+        appendAIMessage('bot', currentLang === 'tr' ? "API Anahtarı başarıyla ayarlandı!" : "API Key set successfully!");
+    }
+
+    function appendAIMessage(sender, text) {
+        const msgDiv = document.getElementById('aiMessages');
+        const bubble = document.createElement('div');
+        bubble.className = `ai-msg msg-${sender}`;
+        bubble.innerHTML = text;
+        msgDiv.appendChild(bubble);
+        msgDiv.scrollTop = msgDiv.scrollHeight;
+    }
+
+    function handleAIKeyPress(e) { if(e.key === 'Enter') sendAIMessage(); }
+
+    async function sendAIMessage() {
+        const inputEl = document.getElementById('aiInput');
+        const text = inputEl.value.trim();
+        if(!text) return;
+        appendAIMessage('user', text);
+        inputEl.value = '';
+        await processAIRequest(text);
+    }
+
+    async function analyzeCurrentContext() {
+        if(!resultsCalculated) {
+            appendAIMessage('bot', currentLang === 'tr' ? "Lütfen önce bir analiz gerçekleştirin (Simülasyonu Başlat)." : "Please run the simulation first.");
+            return;
+        }
+        appendAIMessage('user', currentLang === 'tr' ? "Sistemi Yorumla" : "Analyze Setup");
+        
+        const force = document.getElementById('force').value;
+        const length = document.getElementById('length').value;
+        const beamType = document.getElementById('beamType').options[document.getElementById('beamType').selectedIndex].text;
+        const m1 = materials[document.getElementById('mat1').value].name;
+        const m2 = materials[document.getElementById('mat2').value].name;
+        
+        let promptText = currentLang === 'tr' ? 
+            `Ben bir mühendisim. Sistemimde ${beamType} kullanıyorum. ${force} N kuvvet, ${length} mm uzunluk var. Seçtiğim iki ana malzeme ${m1} ve ${m2}. Kısa ve profesyonel bir mühendislik tavsiyesi ver.` :
+            `I am an engineer. I have a ${beamType} with ${force} N force and ${length} mm length. Materials: ${m1} and ${m2}. Give a short, professional engineering advice.`;
+
+        await processAIRequest(promptText, true);
+    }
+
+    async function processAIRequest(prompt, isContextAnalysis = false) {
+        const apiKey = localStorage.getItem('gemini_api_key');
+        
+        // EĞER API KEY YOKSA: Yerleşik (Heuristic) Akıllı Simülasyon Çalışır
+        if(!apiKey) {
+            setTimeout(() => {
+                let response = "";
+                if(isContextAnalysis) {
+                    const f = document.getElementById('force').value;
+                    const m1 = materials[document.getElementById('mat1').value].name;
+                    response = currentLang === 'tr' ? 
+                        `<strong>AeroMech Akıllı Yorum (Simülasyon):</strong> Girdiğiniz ${f} birimlik yük altında ${m1} malzemesi yapısal bir tepki verecektir. Sistemin hesapladığı Güvenlik Faktörü tablosunu inceleyiniz. Havacılık projelerinde güvenlik faktörünün en az 1.5 olması tavsiye edilir. <br><br><i style="font-size:11px; color:gray;">Not: Gerçek yapay zeka deneyimi için Ayarlar (⚙️) menüsünden Gemini API anahtarınızı girebilirsiniz.</i>` : 
+                        `<strong>AeroMech Smart Insight (Simulated):</strong> Under the ${f} unit load, ${m1} will respond structurally. Please check the Safety Factor card. Aerospace standards recommend a safety factor of at least 1.5. <br><br><i style="font-size:11px; color:gray;">Note: For real AI generation, insert your Gemini API Key in the Settings (⚙️).</i>`;
+                } else {
+                    response = currentLang === 'tr' ? 
+                        `Şu an "Akıllı Simülasyon" modundayım. Sorunuzu algıladım: <em>"${prompt}"</em>. Bu konuyu detaylı analiz etmek için lütfen hesaplama araçlarını kullanın veya gerçek zamanlı AI için API anahtarı ekleyin.` : 
+                        `I am in "Smart Simulation" mode. I received your input: <em>"${prompt}"</em>. Please use the calculation tools or add an API key for live AI responses.`;
+                }
+                appendAIMessage('bot', response);
+            }, 800);
+            return;
+        }
+
+        // EĞER API KEY VARSA: Gerçek Gemini AI Çağrısı Yapılır
+        appendAIMessage('bot', '<span id="aiTyping">...</span>');
+        try {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            });
+            const data = await res.json();
+            const typingEl = document.getElementById('aiTyping');
+            if(typingEl) typingEl.parentNode.remove();
+            
+            if(data.candidates && data.candidates[0].content.parts[0].text) {
+                // Markdown kalın yazıları HTML'e çevir
+                let text = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                appendAIMessage('bot', text);
+            } else {
+                appendAIMessage('bot', "API Error: No response generated.");
+            }
+        } catch(err) {
+            const typingEl = document.getElementById('aiTyping');
+            if(typingEl) typingEl.parentNode.remove();
+            appendAIMessage('bot', `Bağlantı hatası veya geçersiz API Anahtarı. Lütfen kontrol edin.`);
+        }
+    }
+
 
     function triggerPrint() {
         const ua = navigator.userAgent || navigator.vendor || window.opera;
@@ -848,6 +1155,9 @@
         } else {
             materials = { ...defaultMaterials };
         }
+        
+        const storedKey = localStorage.getItem('gemini_api_key');
+        if(storedKey) document.getElementById('apiKeyInput').value = storedKey;
     }
 
     function saveCustomMaterials() {
@@ -1064,6 +1374,12 @@
         if (resultsCalculated && document.getElementById('tab-analysis').classList.contains('active')) {
             calculate();
         }
+        
+        // AI açık ve ilk mesaja sahipse dili güncelle
+        const msgs = document.getElementById('aiMessages');
+        if(msgs.children.length === 1 && msgs.children[0].classList.contains('msg-bot')) {
+            msgs.children[0].innerHTML = dict[currentLang].aiWelcome;
+        }
     }
 
     function updateLangUI() {
@@ -1136,6 +1452,9 @@
         document.getElementById('btnExpert').textContent = expertMode ? t.expertModeOn : t.expertModeOff;
         
         document.getElementById('themeBtn').textContent = isLight ? t.themeDark : t.themeLight;
+        
+        document.getElementById('aiAnalyzeBtn').textContent = t.aiAnalyzeBtn;
+        document.getElementById('aiInput').placeholder = t.aiPlaceholder;
         
         populateDropdowns();
         renderCustomList();
@@ -1341,7 +1660,7 @@
 
         radarDataCache = [];
         lastDeflectionData = []; 
-        let safeMaterials = []; // YENİ: Akıllı Optimizasyon İçin
+        let safeMaterials = []; 
 
         const colorsArr = ['#38bdf8', '#10b981', '#ef4444'];
 
@@ -1372,7 +1691,6 @@
             const displayStress = maxStress * stressUnit;
             const displayYield = mat.yield * stressUnit;
 
-            // YENİ: Özgül Mukavemet Hesabı (MPa / g/cm3)
             const specificStrength = (mat.yield / mat.density).toFixed(1); 
 
             if (isSafe) {
@@ -1430,7 +1748,6 @@
             radarDataCache.push({ name: mat.name, values: [mat.density, mat.yield, mat.eMod, mat.cost, mat.alpha] });
         });
 
-        // YENİ: Akıllı Optimizasyon Çıktısı (Sadece güvenli olanlar arasında kıyaslar)
         const insightsDiv = document.getElementById('insightsContainer');
         if (safeMaterials.length === 0) {
             insightsDiv.innerHTML = `
