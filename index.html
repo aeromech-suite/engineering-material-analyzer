@@ -13,7 +13,6 @@
     <title>AeroMech Analyzer Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- PDF Dışa Aktarma Kütüphanesi -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
@@ -121,8 +120,9 @@
             border: 1px solid var(--section-border);
             padding: 8px 12px; border-radius: 8px;
             text-decoration: none; font-size: 13px; font-weight: 500;
-            transition: all 0.2s;
-            position: relative; z-index: 101; /* Tıklanabilir */
+            transition: all 0.2s; cursor: pointer;
+            position: relative; z-index: 101;
+            font-family: 'Inter', sans-serif;
         }
         .back-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); }
 
@@ -147,7 +147,7 @@
             font-size: 13px;
             transition: all 0.2s; 
             font-family: 'Inter', sans-serif;
-            position: relative; z-index: 101; /* Tıklanabilir */
+            position: relative; z-index: 101; 
         }
         .lang-btn:hover, .theme-btn:hover { 
             color: var(--text);
@@ -161,7 +161,7 @@
             padding: 40px 20px; 
             box-sizing: border-box;
             position: relative;
-            z-index: 10; /* Tıklamaların hedefini bulması için */
+            z-index: 10; 
         }
         
         .tabs { 
@@ -175,7 +175,7 @@
             width: fit-content;
             margin-left: auto;
             margin-right: auto;
-            position: relative; z-index: 11; /* En üstte */
+            position: relative; z-index: 11; 
         }
         .tab-btn { 
             background: transparent; 
@@ -453,10 +453,10 @@
 
         /* GÜVENLİ: HİÇBİR BUTONU ENGELLEMEYEN YENİ TUR (TOOLTIP) MİMARİSİ */
         .safe-tour-tooltip {
-            position: absolute; /* Fixed yerine Absolute */
+            position: absolute; /* Sadece ilgili div'in yanına konumlanır */
             background: var(--text); color: var(--bg);
             padding: 20px; border-radius: 12px; width: 300px;
-            z-index: 5000; /* Çok yüksek değil, makul */
+            z-index: 5000; /* Çok yüksek yapılıp sekmeleri bozması engellendi */
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             display: none; animation: fadeIn 0.3s ease;
         }
@@ -507,11 +507,11 @@
 
 <div class="navbar">
     <div class="nav-left">
-        <!-- GÜVENLİ: Ana Sayfaya Dönüş Butonu -->
-        <a href="index.html" class="back-btn">
+        <!-- GÜVENLİ: Ana Sayfaya Dönüş Butonu (Iframe Sinyali) -->
+        <button onclick="goBackToParent()" class="back-btn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
             <span id="btnBackHome">Ana Menüye Dön</span>
-        </a>
+        </button>
         <div class="brand">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polygon points="12 2 2 22 12 17 22 22 12 2"></polygon>
@@ -806,6 +806,11 @@
 </div>
 
 <script>
+    // --- Iframe Sinyali Fonksiyonu ---
+    function goBackToParent() {
+        window.parent.postMessage('closeApp', '*');
+    }
+
     // --- GÜVENLİ TOUR (ONBOARDING) FONKSİYONLARI ---
     let currentTourStep = 0;
     const tourSteps = [
@@ -844,7 +849,6 @@
             document.getElementById('tourNextBtn').innerText = (index === tourSteps.length - 1) ? t.tourFinish : t.tourNext;
             
             const rect = el.getBoundingClientRect();
-            // Basit ve güvenli konumlandırma
             tooltip.style.top = `${rect.top + window.scrollY + 20}px`;
             tooltip.style.left = `${rect.left + 20}px`;
         }
@@ -1512,7 +1516,6 @@
         resultsCalculated = true; lastBeamType = beamType;
         drawRadarChart(radarDataCache); drawDeformationAnimation(lastDeflectionData, lastBeamType);
         
-        // Eğer tur bitmediyse ve butona basıldıysa turu sonlandır
         endTour();
     }
 
@@ -1584,7 +1587,7 @@
     function init() {
         loadSavedMaterials(); populateDropdowns(); document.getElementById('currentDate').innerText = new Date().toLocaleDateString();
         updateLangUI(); updateDynamicSVG();
-        setTimeout(startTour, 800); // Turu başlat (Eğer daha önce görmediyse)
+        setTimeout(startTour, 800); 
     }
 
     window.onload = init;
