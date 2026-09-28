@@ -279,7 +279,7 @@
         /* GÜVENLİ: HİÇBİR BUTONU ENGELLEMEYEN YENİ TUR (TOOLTIP) MİMARİSİ */
         .safe-tour-tooltip {
             position: absolute; background: var(--text); color: var(--bg);
-            padding: 20px; border-radius: 12px; width: 300px; z-index: 500; /* Düşük z-index */
+            padding: 20px; border-radius: 12px; width: 300px; z-index: 500;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: none; animation: fadeIn 0.3s ease;
         }
         .safe-tour-tooltip::after { content: ""; position: absolute; top: -10px; left: 20px; border-width: 0 10px 10px 10px; border-style: solid; border-color: transparent transparent var(--text) transparent; }
@@ -826,7 +826,7 @@
         } else if (tabId === 'analysis' && resultsCalculated) {
             document.getElementById('resultsArea').style.display = 'block';
         }
-        endTour(); // Sekme değişirse turu kapat
+        endTour(); 
     }
 
     function toggleAIChat() {
